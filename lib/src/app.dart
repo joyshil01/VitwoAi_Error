@@ -1,28 +1,15 @@
-import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:error/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
-import 'common_Widget/navBottom.dart';
+import 'package:get/get.dart';
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       onGenerateTitle: (BuildContext context) => 'Vitwo ai Error',
       debugShowCheckedModeBanner: false,
-      home: AnimatedSplashScreen(
-        duration: 1500,
-        splashTransition: SplashTransition.fadeTransition,
-        // pageTransitionType: PageTransitionType.scale,
-        backgroundColor: Colors.white,
-        splash: Center(
-          child: Container(
-            child: Image.asset(
-              'assets/vitwo-ai-loader.gif',
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        nextScreen: MainPage(),
-      ),
+      getPages: RoutesClass.routes,
+      initialRoute: RoutesClass.home,
       theme: ThemeData(
         scaffoldBackgroundColor: Color(0xfffdbe5ee), //background color
         primaryColor: Color.fromARGB(255, 198, 210, 223),

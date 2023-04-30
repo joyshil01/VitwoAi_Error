@@ -31,10 +31,10 @@ dependencies:
   flutter:
     sdk: flutter
   persistent_bottom_nav_bar:
-  lottie:
   animated_splash_screen:
   flutter_launcher_icons:
   intl:
+  get:
 
 
   # The following adds the Cupertino Icons font to your application.

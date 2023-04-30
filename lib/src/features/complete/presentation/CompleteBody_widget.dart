@@ -1,16 +1,18 @@
-import 'package:error/src/utils/media-query.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../constans.dart';
 import '../../../common_Widget/containerStyle.dart';
 import '../../../routing/app_router.dart';
+import '../../../utils/media-query.dart';
 
-class homeBody extends StatefulWidget {
+class CompleteBody extends StatefulWidget {
+  const CompleteBody({super.key});
+
   @override
-  State<homeBody> createState() => _homeBodyState();
+  State<CompleteBody> createState() => _CompleteBodyState();
 }
 
-class _homeBodyState extends State<homeBody> {
+class _CompleteBodyState extends State<CompleteBody> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -38,25 +40,29 @@ class _homeBodyState extends State<homeBody> {
                       Container(
                         child: Text(
                           'Vitwo ai',
-                          style: Theme.of(context).textTheme.bodyMedium,
+                          style:
+                              Theme.of(context).textTheme.bodyMedium,
                         ),
                       ),
                       Row(
                         children: [
                           const Icon(
-                            Icons.question_mark,
+                            Icons.done_all_outlined,
                             size: 20,
-                            color: questionmarkColor,
+                            color: completemarkColor,
+                          ),
+                          SizedBox(
+                            width: SizeVariables.getWidth(context) * 0.01,
                           ),
                           Text(
-                            'May-02-2023',
+                            'Apr-28-2023',
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                           SizedBox(
                             width: SizeVariables.getWidth(context) * 0.01,
                           ),
                           Text(
-                            '[14:32]',
+                            '[17:32]',
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ],
@@ -66,13 +72,14 @@ class _homeBodyState extends State<homeBody> {
                   SizedBox(
                     height: SizeVariables.getHeight(context) * 0.004,
                   ),
+                  
                   Container(
                     child: Text(
                       'Dashboard ui dropdown popup fixed ',
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                            fontSize: 18,
-                            color: titletextColor,
-                          ),
+                        fontSize: 18,
+                        color: titletextColor,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -80,6 +87,7 @@ class _homeBodyState extends State<homeBody> {
                   SizedBox(
                     height: SizeVariables.getHeight(context) * 0.006,
                   ),
+                  
                   Container(
                     // width: SizeVariables.getWidth(context) * 0.6,
                     child: Text(
