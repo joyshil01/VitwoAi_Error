@@ -10,6 +10,17 @@ class ErrorDetails_Screen extends StatefulWidget {
 }
 
 class _ErrorDetails_ScreenState extends State<ErrorDetails_Screen> {
+  bool light1 = false;
+  final MaterialStateProperty<Icon?> thumbIcon =
+      MaterialStateProperty.resolveWith<Icon?>(
+    (Set<MaterialState> states) {
+      // Thumb icon when the switch is selected.
+      if (states.contains(MaterialState.selected)) {
+        return const Icon(Icons.check, color: Colors.white,);
+      }
+      return const Icon(Icons.close, color: Colors.red);
+    },
+  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,6 +67,19 @@ class _ErrorDetails_ScreenState extends State<ErrorDetails_Screen> {
             ),
           ],
         ),
+        actions: [
+          Switch(
+            activeColor: Colors.green,
+            inactiveThumbColor: Colors.grey,
+            thumbIcon: thumbIcon,
+            value: light1,
+            onChanged: (bool value) {
+              setState(() {
+                light1 = value;
+              });
+            },
+          ),
+        ],
       ),
       body: DetailsBody(),
     );

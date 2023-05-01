@@ -8,3 +8,4 @@ const questionmarkColor = Color.fromARGB(255, 143, 46, 46);
 const completemarkColor = Color.fromARGB(255, 56, 141, 100);
 const titletextColor = Color.fromARGB(255, 87, 87, 87);
 const copyiconColor = Colors.black;
+const containerCopyStyle = Color.fromARGB(230, 225, 225, 225);

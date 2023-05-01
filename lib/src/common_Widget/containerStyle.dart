@@ -30,3 +30,32 @@ class ContainerStyle extends StatelessWidget {
     );
   }
 }
+
+class ContainerCopyStyle extends StatelessWidget {
+  final Widget child;
+  final double? width;
+
+  ContainerCopyStyle({
+    // required this.height,
+    required this.child,
+    this.width,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(width * 0.01),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration: BoxDecoration(
+          color: containerCopyStyle,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: child,
+      ),
+    );
+  }
+}
