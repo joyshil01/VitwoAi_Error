@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../../constans.dart';
 import '../../../common_Widget/containerStyle.dart';
 import '../../../utils/media-query.dart';
+import 'package:flutter/services.dart';
 
 class DetailsBody extends StatefulWidget {
   @override
@@ -9,6 +11,10 @@ class DetailsBody extends StatefulWidget {
 }
 
 class _DetailsBodyState extends State<DetailsBody> {
+  TextEditingController copyController = new TextEditingController();
+  final copytext =
+      'The following assertion was thrown during performLayout(): The following assertion was thrown during performLayout(): An InputDecorator, which is typically created by a TextField, cannot have an unbounded width.This happens when the parent widget does not provide a finite width constraint. The following assertion was thrown during performLayout(): An InputDecorator, which is typically created by a TextField, cannot have an unbounded width.This happens when the parent widget does not provide a finite width constraint. The following assertion was thrown during performLayout(): An InputDecorator, which is typically created by a TextField, cannot have an unbounded width.This happens when the parent widget does not provide a finite width constraint.The following assertion was thrown during performLayout(): An InputDecorator, which is typically created by a TextField, cannot have an unbounded width.This happens when the parent widget does not provide a finite width constraint.The following assertion was thrown during performLayout(): An InputDecorator, which is typically created by a TextField, cannot have an unbounded width.This happens when the parent widget does not provide a finite width constraint. The following assertion was thrown during performLayout(): An InputDecorator, which is typically created by a TextField, cannot have an unbounded width.This happens when the parent widget does not provide a finite width constraint. The following assertion was thrown during performLayout(): An InputDecorator, which is typically created by a TextField, cannot have an unbounded width.This happens when the parent widget does not provide a finite width constraint. An InputDecorator, which is typically created by a TextField, cannot have an unbounded width.This happens when the parent widget does not provide a finite width constraint. For example, if the InputDecorator is contained by a `Row`, then its width must be constrained. An `Expanded` widget or a SizedBox can be used to constrain the width of the InputDecorator or the TextField that contains it.(Additional lines of this message omitted)';
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -137,7 +143,10 @@ class _DetailsBodyState extends State<DetailsBody> {
                                   ),
                         ),
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            final value = ClipboardData(text: copytext);
+                            Clipboard.getData(value.toString());
+                          },
                           child: const Icon(
                             Icons.copy,
                             color: copyiconColor,
@@ -149,13 +158,14 @@ class _DetailsBodyState extends State<DetailsBody> {
                     SizedBox(
                       height: SizeVariables.getHeight(context) * 0.01,
                     ),
-                    Text(
-                      'The following assertion was thrown during performLayout(): The following assertion was thrown during performLayout(): An InputDecorator, which is typically created by a TextField, cannot have an unbounded width.This happens when the parent widget does not provide a finite width constraint. The following assertion was thrown during performLayout(): An InputDecorator, which is typically created by a TextField, cannot have an unbounded width.This happens when the parent widget does not provide a finite width constraint. The following assertion was thrown during performLayout(): An InputDecorator, which is typically created by a TextField, cannot have an unbounded width.This happens when the parent widget does not provide a finite width constraint.The following assertion was thrown during performLayout(): An InputDecorator, which is typically created by a TextField, cannot have an unbounded width.This happens when the parent widget does not provide a finite width constraint.The following assertion was thrown during performLayout(): An InputDecorator, which is typically created by a TextField, cannot have an unbounded width.This happens when the parent widget does not provide a finite width constraint. The following assertion was thrown during performLayout(): An InputDecorator, which is typically created by a TextField, cannot have an unbounded width.This happens when the parent widget does not provide a finite width constraint. The following assertion was thrown during performLayout(): An InputDecorator, which is typically created by a TextField, cannot have an unbounded width.This happens when the parent widget does not provide a finite width constraint. An InputDecorator, which is typically created by a TextField, cannot have an unbounded width.This happens when the parent widget does not provide a finite width constraint. For example, if the InputDecorator is contained by a `Row`, then its width must be constrained. An `Expanded` widget or a SizedBox can be used to constrain the width of the InputDecorator or the TextField that contains it.(Additional lines of this message omitted)',
+                    SelectableText(
+                      copytext,
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             color: questionmarkColor,
                             fontSize: 14,
                           ),
                       textAlign: TextAlign.justify,
+                      showCursor: true,
                     ),
                   ],
                 ),
