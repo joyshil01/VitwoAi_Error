@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../constans.dart';
-import '../../../common_Widget/containerStyle.dart';
+import '../../../widget/containerStyle.dart';
 import '../../../routing/app_router.dart';
 import '../../../utils/media-query.dart';
 

@@ -35,8 +35,7 @@ class ContainerCopyStyle extends StatelessWidget {
   final Widget child;
   final double? width;
 
-  ContainerCopyStyle({
-    // required this.height,
+  const ContainerCopyStyle({
     required this.child,
     this.width,
   });
@@ -53,6 +52,14 @@ class ContainerCopyStyle extends StatelessWidget {
         decoration: BoxDecoration(
           color: containerCopyStyle,
           borderRadius: BorderRadius.circular(20),
+          // boxShadow: [
+          //   BoxShadow(
+          //     // color: Color.fromARGB(255, 184, 182, 182),
+          //     offset: Offset(5, 5),
+          //     blurRadius: 10,
+          //     spreadRadius: 20
+          //   ),
+          // ],
         ),
         child: child,
       ),

@@ -1,11 +1,15 @@
+// ignore_for_file: camel_case_types
+
 import 'package:error/src/utils/media-query.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../constans.dart';
-import '../../../common_Widget/containerStyle.dart';
+import '../../../widget/containerStyle.dart';
 import '../../../routing/app_router.dart';
 
 class homeBody extends StatefulWidget {
+  const homeBody({super.key});
+
   @override
   State<homeBody> createState() => _homeBodyState();
 }

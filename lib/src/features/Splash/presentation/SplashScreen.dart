@@ -1,6 +1,6 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
-import '../../../common_Widget/navBottom.dart';
+import '../../login/presentation/loginScreen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({
@@ -21,7 +21,7 @@ class SplashScreen extends StatelessWidget {
           ),
         ),
       ),
-      nextScreen: MainPage(),
+      nextScreen: const LoginScreen(),
     );
   }
 }

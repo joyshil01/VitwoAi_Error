@@ -103,7 +103,7 @@ class _Home_PageState extends State<Home_Page> {
           ),
         ],
       ),
-      body: homeBody(),
+      body: const homeBody(),
     );
   }
 }

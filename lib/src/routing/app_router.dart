@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../features/Splash/presentation/SplashScreen.dart';
 import '../features/error_Details/presentation/errorDetalis_Screen.dart';
@@ -12,7 +11,7 @@ class RoutesClass {
   static List<GetPage> routes = [
     GetPage(
       name: home,
-      page: () => SplashScreen(),
+      page: () => const SplashScreen(),
     ),
     GetPage(
       transition: Transition.zoom,

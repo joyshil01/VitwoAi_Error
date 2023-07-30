@@ -56,14 +56,12 @@ class _ErrorDetails_ScreenState extends State<ErrorDetails_Screen> {
             SizedBox(
               width: SizeVariables.getWidth(context) * 0.16,
             ),
-            Container(
-              child: Text(
-                'Error Detalis',
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      color: Theme.of(context).hintColor,
-                      fontSize: 20,
-                    ),
-              ),
+            Text(
+              'Error Detalis',
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    color: Theme.of(context).hintColor,
+                    fontSize: 20,
+                  ),
             ),
           ],
         ),
