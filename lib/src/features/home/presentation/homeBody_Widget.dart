@@ -20,18 +20,16 @@ class _homeBodyState extends State<homeBody> {
     return ListView.builder(
       itemCount: 20,
       itemBuilder: (context, index) => Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
         child: GestureDetector(
           onTap: () {
             Get.toNamed(RoutesClass.getErordetailsRoute());
           },
           child: ContainerStyle(
             child: Container(
-              margin: EdgeInsets.only(
-                left: SizeVariables.getWidth(context) * 0.03,
-                right: SizeVariables.getWidth(context) * 0.03,
-                top: SizeVariables.getHeight(context) * 0.01,
-                bottom: SizeVariables.getHeight(context) * 0.015,
+              margin: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 20,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

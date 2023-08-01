@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types
+
 import 'package:error/constans.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -5,6 +7,8 @@ import '../../../utils/media-query.dart';
 import 'homeBody_Widget.dart';
 
 class Home_Page extends StatefulWidget {
+  const Home_Page({super.key});
+
   @override
   State<Home_Page> createState() => _Home_PageState();
 }
@@ -33,7 +37,7 @@ class _Home_PageState extends State<Home_Page> {
         backgroundColor: Theme.of(context).colorScheme.secondary,
         automaticallyImplyLeading: false,
         title: Text(
-          'Error List',
+          'Active List',
           style: Theme.of(context).textTheme.bodySmall!.copyWith(
                 color: Theme.of(context).hintColor,
                 fontSize: 20,
@@ -97,7 +101,7 @@ class _Home_PageState extends State<Home_Page> {
               child: Icon(
                 Icons.notifications_active,
                 color: notificationiconColor,
-                size: 30,
+                size: 25,
               ),
             ),
           ),

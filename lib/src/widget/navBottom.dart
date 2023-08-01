@@ -4,6 +4,7 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import '../../constans.dart';
 import '../features/complete/presentation/Complete_Screen.dart';
 import '../features/home/presentation/home_Page.dart';
+import '../features/open/presentation/openScreen.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -23,6 +24,7 @@ class _MainPageState extends State<MainPage> {
         context,
         controller: _controller,
         screens: [
+          OpenScreen(),
           Home_Page(),
           Complete_Screen(),
         ],
@@ -35,20 +37,22 @@ class _MainPageState extends State<MainPage> {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        icon: const Badge(
-          label: Text('20'),
-          smallSize: 4,
-          isLabelVisible: true,
-          child: Icon(CupertinoIcons.home),
-        ),
-        title: ("Home"),
+        icon: const Icon(CupertinoIcons.equal_circle),
+        title: ("Open"),
+        textStyle: Theme.of(context).textTheme.bodyMedium,
+        activeColorPrimary: Colors.amber,
+        inactiveColorPrimary: CupertinoColors.systemGrey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: const Icon(CupertinoIcons.asterisk_circle),
+        title: ("Active"),
         textStyle: Theme.of(context).textTheme.bodyMedium,
         activeColorPrimary: mainColor,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.checkmark_alt_circle),
-        title: ("Complete"),
+        title: ("Done"),
         textStyle: Theme.of(context).textTheme.bodyMedium,
         activeColorPrimary: Colors.green,
         inactiveColorPrimary: CupertinoColors.systemGrey,

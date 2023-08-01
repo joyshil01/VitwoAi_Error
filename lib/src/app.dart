@@ -1,5 +1,6 @@
 import 'package:error/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
 class MyApp extends StatelessWidget {
@@ -10,6 +11,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       getPages: RoutesClass.routes,
       initialRoute: RoutesClass.home,
+      builder: EasyLoading.init(),
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white, //background color
         primaryColor: Color.fromARGB(255, 198, 210, 223),

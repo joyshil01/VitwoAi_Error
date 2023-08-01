@@ -1,18 +1,42 @@
 // ignore_for_file: file_names
 
 import 'package:error/src/widget/navBottom.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
+import '../../../routing/app_router.dart';
+import 'loginController.dart';
 
-class LoginForm extends StatelessWidget {
-  const LoginForm({
-    super.key,
-  });
+class LoginForm extends ConsumerStatefulWidget {
+  const LoginForm({super.key});
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends ConsumerState<LoginForm> {
+  final email = TextEditingController();
+  final passWord = TextEditingController();
+  String? fcm;
+  Future<void> fcmCodeGenerate() async {
+    fcm = await FirebaseMessaging.instance.getToken();
+    print('FCM CODE: $fcm');
+  }
 
   @override
   Widget build(BuildContext context) {
-    final email = TextEditingController();
-    final password = TextEditingController();
+    ref.listen<AsyncValue>(loginScreenControllerProvider,
+        (previousState, state) {
+      if (!state.isLoading && state.hasError) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(state.error.toString()),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+        ));
+      }
+    });
+    final state = ref.watch(loginScreenControllerProvider);
     return Column(
       children: [
         TextField(
@@ -45,7 +69,7 @@ class LoginForm extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         TextField(
-          controller: password,
+          controller: passWord,
           cursorColor: Colors.black,
           textInputAction: TextInputAction.next,
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: 16),
@@ -84,8 +108,60 @@ class LoginForm extends StatelessWidget {
               side: const BorderSide(color: Colors.black),
               padding: const EdgeInsets.symmetric(vertical: 15),
             ),
-            onPressed: () {
-              Get.to(() => const MainPage());
+            onPressed: () async {
+              if (email.text == null || email.text == '') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Enter your email',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(fontSize: 16),
+                    ),
+                    elevation: 5,
+                    backgroundColor: Colors.white,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                );
+              } else if (passWord.text == null || passWord.text == '') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Enter your password',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(fontSize: 16),
+                    ),
+                    elevation: 5,
+                    backgroundColor: Colors.white,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                );
+              } else {
+                final success = await ref
+                    .read(loginScreenControllerProvider.notifier)
+                    .signInWithEmailAndPassword(
+                      email.text,
+                      passWord.text,
+                      fcm,
+                    );
+                print('success: $success');
+                if (success) {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MainPage()));
+                }
+                Navigator.of(context).pop();
+              }
             },
             child: Text(
               'login'.toUpperCase(),

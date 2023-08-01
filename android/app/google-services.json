@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "805152725221",
+    "project_id": "vitwoerror",
+    "storage_bucket": "vitwoerror.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:805152725221:android:3d2f93e872bedc0ce9dc0c",
+        "android_client_info": {
+          "package_name": "com.example.error"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "805152725221-gogpe4h128e5fnnls1omtp4c6h3h8n2u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAskOa2hv6LTXIs-Xv2dO9JVBFHQtkkv5I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "805152725221-gogpe4h128e5fnnls1omtp4c6h3h8n2u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
