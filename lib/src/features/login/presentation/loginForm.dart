@@ -4,7 +4,10 @@ import 'package:error/src/widget/navBottom.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:get/get.dart';
+// import '../../../routing/app_router.dart';
 import '../../../routing/app_router.dart';
 import 'loginController.dart';
 
@@ -25,15 +28,26 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   }
 
   @override
+  void initState() {
+    fcmCodeGenerate();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     ref.listen<AsyncValue>(loginScreenControllerProvider,
         (previousState, state) {
       if (!state.isLoading && state.hasError) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(state.error.toString()),
-          backgroundColor: Colors.red,
-          behavior: SnackBarBehavior.floating,
-        ));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(state.error.toString()),
+            backgroundColor: Colors.red.shade300,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+        );
       }
     });
     final state = ref.watch(loginScreenControllerProvider);
@@ -117,13 +131,13 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium!
-                          .copyWith(fontSize: 16),
+                          .copyWith(fontSize: 16, color: Colors.white),
                     ),
                     elevation: 5,
-                    backgroundColor: Colors.white,
+                    backgroundColor: Colors.red.shade300,
                     behavior: SnackBarBehavior.floating,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                 );
@@ -135,13 +149,13 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium!
-                          .copyWith(fontSize: 16),
+                          .copyWith(fontSize: 16, color: Colors.white),
                     ),
                     elevation: 5,
-                    backgroundColor: Colors.white,
+                    backgroundColor: Colors.red.shade300,
                     behavior: SnackBarBehavior.floating,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                 );
@@ -153,14 +167,10 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                       passWord.text,
                       fcm,
                     );
-                print('success: $success');
                 if (success) {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const MainPage()));
+                  context.pushReplacementNamed(AppRoute.home.name);
+                  
                 }
-                Navigator.of(context).pop();
               }
             },
             child: Text(

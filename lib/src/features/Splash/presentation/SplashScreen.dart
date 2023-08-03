@@ -9,11 +9,8 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSplashScreen(
-      duration: 1500,
-      splashTransition: SplashTransition.fadeTransition,
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      splash: Center(
+    return Scaffold(
+      body: Center(
         child: Container(
           child: Image.asset(
             'assets/vitwo-ai-loader.gif',
@@ -21,7 +18,6 @@ class SplashScreen extends StatelessWidget {
           ),
         ),
       ),
-      nextScreen: const LoginScreen(),
     );
   }
 }

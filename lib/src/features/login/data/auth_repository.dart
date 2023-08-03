@@ -25,26 +25,30 @@ class AuthRepository {
     request.fields['fcm'] = fcm!;
 
     var response = await request.send();
-
     if (response.statusCode == 200) {
-      print('success');
       var response2 = await http.Response.fromStream(response);
       var responseDecoded = json.decode(response2.body);
+      print('success');
+      if (responseDecoded['status'] == "success") {
+        var token = responseDecoded['token'];
+        var userId = responseDecoded['data']['user_id'];
+        var userType = responseDecoded['data']['user_type'];
+        var userImage = responseDecoded['data']['user_profile'];
+        var userName = responseDecoded['data']['user_name'];
 
-      var token = responseDecoded['token'];
-      var userId = responseDecoded['data']['user_id'];
-      var userType = responseDecoded['data']['user_type'];
-      var userImage = responseDecoded['data']['user_profile'];
-      var userName = responseDecoded['data']['user_name'];
-
-      sharedPreferences.setString('token', token);
-      sharedPreferences.setString('userId', userId);
-      sharedPreferences.setString('userType', userType);
-      sharedPreferences.setString('userImage', userImage);
-      sharedPreferences.setString('userName', userName);
+        sharedPreferences.setString('token', token);
+        sharedPreferences.setString('userId', userId);
+        sharedPreferences.setString('userType', userType);
+        sharedPreferences.setString('userImage', userImage);
+        sharedPreferences.setString('userName', userName);
+        print('token: ${sharedPreferences.getString('token')}');
+      } else {
+        print('failure');
+        throw Exception(responseDecoded['message']);
+      }
     } else {
       print('failure');
-      throw Exception('Something went wrong');
+      throw Exception("Invalid credentials, please try again!");
     }
   }
 

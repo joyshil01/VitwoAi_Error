@@ -1,6 +1,6 @@
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+// import 'package:get/get.dart';
 import '../../../../constans.dart';
 import '../../../widget/containerStyle.dart';
 import '../../../utils/media-query.dart';

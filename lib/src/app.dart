@@ -1,16 +1,19 @@
+// import 'package:error/src/routing/app_router.dart';
 import 'package:error/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:get/get.dart';
+// import 'package:get/get.dart';
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp.router(
       onGenerateTitle: (BuildContext context) => 'Vitwo ai Error',
       debugShowCheckedModeBanner: false,
-      getPages: RoutesClass.routes,
-      initialRoute: RoutesClass.home,
+      restorationScopeId: 'app',
+      routerConfig: goRouter,
+      // getPages: RoutesClass.routes,
+      // initialRoute: RoutesClass.home,
       builder: EasyLoading.init(),
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white, //background color

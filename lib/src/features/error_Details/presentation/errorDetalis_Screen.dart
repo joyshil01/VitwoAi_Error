@@ -1,6 +1,6 @@
 import 'package:error/src/utils/media-query.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+// import 'package:get/get.dart';
 import '../../../../constans.dart';
 import 'detailsBody_widget.dart';
 
@@ -35,7 +35,7 @@ class _ErrorDetails_ScreenState extends State<ErrorDetails_Screen> {
           children: [
             GestureDetector(
               onTap: () {
-                Get.back();
+                // Get.back();
               },
               child: Container(
                 child: Row(

@@ -2,10 +2,10 @@
 
 import 'package:error/src/utils/media-query.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+// import 'package:get/get.dart';
 import '../../../../constans.dart';
 import '../../../widget/containerStyle.dart';
-import '../../../routing/app_router.dart';
+// import '../../../routing/app_router.dart';
 
 class homeBody extends StatefulWidget {
   const homeBody({super.key});
@@ -23,7 +23,7 @@ class _homeBodyState extends State<homeBody> {
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
         child: GestureDetector(
           onTap: () {
-            Get.toNamed(RoutesClass.getErordetailsRoute());
+            // Get.toNamed(RoutesClass.getErordetailsRoute());
           },
           child: ContainerStyle(
             child: Container(

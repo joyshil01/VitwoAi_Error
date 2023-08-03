@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+// import 'package:get/get.dart';
 import '../../../../constans.dart';
 import '../../../widget/containerStyle.dart';
-import '../../../routing/app_router.dart';
+// import '../../../routing/app_router.dart';
 import '../../../utils/media-query.dart';
 
 class CompleteBody extends StatefulWidget {
@@ -21,7 +21,7 @@ class _CompleteBodyState extends State<CompleteBody> {
         padding: const EdgeInsets.all(8.0),
         child: GestureDetector(
           onTap: () {
-            Get.toNamed(RoutesClass.getErordetailsRoute());
+            // Get.toNamed(RoutesClass.getErordetailsRoute());
           },
           child: ContainerStyle(
             child: Container(
