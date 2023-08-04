@@ -181,7 +181,7 @@ class _Home_PageState extends State<Home_Page> {
       body: (_isLoading)
           ? const Center(
               child: CircularProgressIndicator(
-                backgroundColor: Colors.amber,
+                backgroundColor: Colors.blueGrey,
               ),
             )
           : (assignBugList.isEmpty)

@@ -1,34 +1,30 @@
-// ignore_for_file: file_names, use_build_context_synchronously
+// ignore_for_file: camel_case_types, use_build_context_synchronously
 
 import 'dart:convert';
+import 'package:error/constans.dart';
+import 'package:error/src/features/todo/domain/todoModel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:get/get.dart';
-import '../../../../constans.dart';
-// import '../../../routing/app_router.dart';
 import '../../../utils/api_urls.dart';
 import '../../../utils/media-query.dart';
 import '../../../widget/containerStyle.dart';
 import 'package:http/http.dart' as http;
-import '../domain/openModel.dart';
-import 'openDetails.dart';
 
-class OpenScreen extends ConsumerStatefulWidget {
-  const OpenScreen({super.key});
+class TodoScreen extends StatefulWidget {
+  const TodoScreen({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _OpenScreenState();
+  State<TodoScreen> createState() => _TodoScreenState();
 }
 
-class _OpenScreenState extends ConsumerState<OpenScreen> {
+class _TodoScreenState extends State<TodoScreen> {
   final scrollController = ScrollController();
   var _isLoadingMore = false;
   var _page = 0;
+  String assigned = 'todo';
   var _isLoading = true;
   var comments = [];
-  List<OpenModel> openbugList = [];
+  List<TodoModel> todoBugList = [];
   var _scrolling = false;
   String? userName;
   String? userType;
@@ -37,7 +33,7 @@ class _OpenScreenState extends ConsumerState<OpenScreen> {
   @override
   void initState() {
     scrollController.addListener(_scrollListener);
-    _fetchOpenbug();
+    _fetchTodobug();
     callSharedPrefs();
     super.initState();
   }
@@ -52,19 +48,25 @@ class _OpenScreenState extends ConsumerState<OpenScreen> {
     });
   }
 
-  Future<void> _fetchOpenbug() async {
+  Future<void> _fetchTodobug() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-    var uri = Uri.parse(openList);
+    var uri = Uri.parse(assignList);
 
     var request = http.MultipartRequest('POST', uri);
 
     request.fields['pageNo'] = _page.toString();
-    request.fields['limit'] = 6.toString();
-    request.fields['status'] = 'open';
+    request.fields['limit'] = 8.toString();
+    request.fields['status'] = assigned;
+    print('Request Parameters: pageNo=$_page, limit=6, status=$assigned');
 
-    request.headers.addAll(
-        {'Authorization': 'Bearer ${sharedPreferences.getString('token')}'});
+    String? token = sharedPreferences.getString('token');
+    if (token != null) {
+      request.headers.addAll({'Authorization': 'Bearer $token'});
+    } else {
+      print('Token is null');
+    }
+
     var response = await request.send();
 
     if (response.statusCode == 200) {
@@ -77,14 +79,14 @@ class _OpenScreenState extends ConsumerState<OpenScreen> {
         _isLoading = false;
       });
 
-      openbugList = comments
-          .map<OpenModel>(
-            (item) => OpenModel(
+      todoBugList = comments
+          .map<TodoModel>(
+            (item) => TodoModel(
               id: item['id'],
               bugCode: item['bug_code'],
               title: item['page_name'],
               description: item['bug_description'],
-              image: item['image_url'],
+              image: item['image_url'] ?? '',
               postigDate: item['created_at'],
               status: item['status'],
               pageUrl: item['page_url'],
@@ -112,10 +114,10 @@ class _OpenScreenState extends ConsumerState<OpenScreen> {
         setState(() {
           _isLoading = false;
           comments = [];
-          openbugList = [];
+          todoBugList = [];
         });
       }
-      print('failure');
+      print('no data');
     }
   }
 
@@ -127,7 +129,7 @@ class _OpenScreenState extends ConsumerState<OpenScreen> {
         backgroundColor: Theme.of(context).colorScheme.secondary,
         automaticallyImplyLeading: false,
         title: Text(
-          'Open List',
+          'Todo list',
           style: Theme.of(context).textTheme.bodySmall!.copyWith(
                 color: Theme.of(context).hintColor,
                 fontSize: 20,
@@ -137,44 +139,32 @@ class _OpenScreenState extends ConsumerState<OpenScreen> {
       body: (_isLoading)
           ? const Center(
               child: CircularProgressIndicator(
-                backgroundColor: Colors.red,
+                backgroundColor: Colors.amber,
               ),
             )
-          : (openbugList.isEmpty)
+          : (todoBugList.isEmpty)
               ? const Center(
-                  child: Text('No Open Bug List'),
+                  child: Text('No Assign Bug List'),
                 )
               : ListView.builder(
                   controller: scrollController,
                   itemCount: (_isLoadingMore)
-                      ? openbugList.length + 1
-                      : openbugList.length,
+                      ? todoBugList.length + 1
+                      : todoBugList.length,
                   itemBuilder: (context, index) {
-                    if (index < openbugList.length) {
+                    if (index < todoBugList.length) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                             vertical: 5, horizontal: 10),
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                fullscreenDialog: true,
-                                builder: (context) => OpenDetails(
-                                  postigDate: openbugList[index].postigDate,
-                                  bugCode: openbugList[index].bugCode,
-                                  title: openbugList[index].title,
-                                  pageUrl: openbugList[index].pageUrl,
-                                  description: openbugList[index].description,
-                                  image: openbugList[index].image,
-                                ),
-                              ),
-                            );
+                            // Get.toNamed(RoutesClass.getErordetailsRoute());
                           },
                           child: ContainerStyle(
                             child: Container(
                               margin: const EdgeInsets.symmetric(
                                 horizontal: 16,
-                                vertical: 20,
+                                vertical: 22,
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -192,28 +182,23 @@ class _OpenScreenState extends ConsumerState<OpenScreen> {
                                                 .bodyMedium,
                                           ),
                                           Text(
-                                            openbugList[index]
+                                            todoBugList[index]
                                                 .status
                                                 .toUpperCase(),
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyMedium!
                                                 .copyWith(
-                                                  fontSize: 16,
-                                                  color: Colors.redAccent,
+                                                  color: Colors.amber,
                                                 ),
                                           ),
                                         ],
                                       ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            openbugList[index].postigDate,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium,
-                                          ),
-                                        ],
+                                      Text(
+                                        todoBugList[index].postigDate,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
                                       ),
                                     ],
                                   ),
@@ -222,7 +207,7 @@ class _OpenScreenState extends ConsumerState<OpenScreen> {
                                         0.004,
                                   ),
                                   Text(
-                                    openbugList[index].bugCode,
+                                    todoBugList[index].bugCode,
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall!
@@ -238,7 +223,7 @@ class _OpenScreenState extends ConsumerState<OpenScreen> {
                                         0.006,
                                   ),
                                   Text(
-                                    openbugList[index].description,
+                                    todoBugList[index].description,
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium!
@@ -255,8 +240,7 @@ class _OpenScreenState extends ConsumerState<OpenScreen> {
                         ),
                       );
                     }
-                  },
-                ),
+                  }),
     );
   }
 
@@ -269,7 +253,7 @@ class _OpenScreenState extends ConsumerState<OpenScreen> {
         _isLoadingMore = true;
       });
       _page = _page + 1;
-      await _fetchOpenbug();
+      await _fetchTodobug();
       setState(() {
         _isLoadingMore = false;
       });

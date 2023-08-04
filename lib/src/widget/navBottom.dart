@@ -5,6 +5,7 @@ import '../../constans.dart';
 import '../features/complete/presentation/Complete_Screen.dart';
 import '../features/home/presentation/home_Page.dart';
 import '../features/open/presentation/openScreen.dart';
+import '../features/todo/presentation/todoScreen.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -28,6 +29,7 @@ class _MainPageState extends State<MainPage> {
         screens: [
           OpenScreen(),
           Home_Page(),
+          TodoScreen(),
           Complete_Screen(),
         ],
         items: _navBarsItems(),
@@ -42,7 +44,7 @@ class _MainPageState extends State<MainPage> {
         icon: const Icon(CupertinoIcons.equal_circle),
         title: ("Open"),
         textStyle: Theme.of(context).textTheme.bodyMedium,
-        activeColorPrimary: Colors.amber,
+        activeColorPrimary: Colors.red,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
@@ -50,6 +52,13 @@ class _MainPageState extends State<MainPage> {
         title: ("Assigned"),
         textStyle: Theme.of(context).textTheme.bodyMedium,
         activeColorPrimary: mainColor,
+        inactiveColorPrimary: CupertinoColors.systemGrey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: const Icon(CupertinoIcons.doc),
+        title: ("Todo"),
+        textStyle: Theme.of(context).textTheme.bodyMedium,
+        activeColorPrimary: Colors.amber,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
