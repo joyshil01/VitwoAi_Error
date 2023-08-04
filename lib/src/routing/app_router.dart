@@ -51,7 +51,7 @@ final goRouter = GoRouter(
     var userType = sharedPreferences.getString('userType');
     var userImage = sharedPreferences.getString('userImage');
     if (token != null && userName != null) {
-      if (state.matchedLocation == '/') {
+      if (state.location == '/') {
         return '/bottom-nav';
       }
     }

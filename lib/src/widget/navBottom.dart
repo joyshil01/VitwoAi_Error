@@ -9,13 +9,15 @@ import '../features/open/presentation/openScreen.dart';
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
+  
+
   @override
   State<MainPage> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
   final PersistentTabController _controller =
-      PersistentTabController(initialIndex: 0);
+      PersistentTabController(initialIndex: 1);
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +47,7 @@ class _MainPageState extends State<MainPage> {
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.asterisk_circle),
-        title: ("Active"),
+        title: ("Assigned"),
         textStyle: Theme.of(context).textTheme.bodyMedium,
         activeColorPrimary: mainColor,
         inactiveColorPrimary: CupertinoColors.systemGrey,

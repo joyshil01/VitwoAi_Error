@@ -1,6 +1,6 @@
 // ignore_for_file: file_names
 
-class OpenModel {
+class AssignModel {
   final String id;
   final String bugCode;
   final String title;
@@ -10,7 +10,7 @@ class OpenModel {
   final String status;
   final String pageUrl;
 
-  OpenModel({
+  AssignModel({
     required this.id,
     required this.bugCode,
     required this.title,

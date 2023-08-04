@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:get/get.dart';
 import '../../../../constans.dart';
@@ -38,7 +39,6 @@ class _OpenScreenState extends ConsumerState<OpenScreen> {
     scrollController.addListener(_scrollListener);
     _fetchOpenbug();
     callSharedPrefs();
-
     super.initState();
   }
 
@@ -73,7 +73,7 @@ class _OpenScreenState extends ConsumerState<OpenScreen> {
       print({'responseeeeeeeeeeeee': responseDecoded});
 
       setState(() {
-        comments = comments + responseDecoded['data']['data'];
+        comments = comments + responseDecoded['data'];
         _isLoading = false;
       });
 
@@ -87,6 +87,7 @@ class _OpenScreenState extends ConsumerState<OpenScreen> {
               image: item['image_url'],
               postigDate: item['created_at'],
               status: item['status'],
+              pageUrl: item['page_url'],
             ),
           )
           .toList();
@@ -132,50 +133,12 @@ class _OpenScreenState extends ConsumerState<OpenScreen> {
                 fontSize: 20,
               ),
         ),
-        actions: [
-          InkWell(
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  content: ListTile(
-                    onTap: () {},
-                    leading: const Icon(Icons.logout_outlined),
-                    title: const Text('Log_out'),
-                  ),
-                ),
-              );
-            },
-            child: Container(
-              child: Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(userName ?? 'Your name'),
-                    ],
-                  ),
-                  const SizedBox(width: 4),
-                  CircleAvatar(
-                    radius: SizeVariables.getHeight(context) * 0.02,
-                    // backgroundColor: Colors.yellow,
-                    // backgroundImage: AssetImage(userImage! ?? ''),
-                  ),
-                  const SizedBox(width: 5),
-                ],
-              ),
-            ),
-          ),
-        ],
       ),
       body: (_isLoading)
           ? const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.amber,
+              ),
             )
           : (openbugList.isEmpty)
               ? const Center(
@@ -195,7 +158,15 @@ class _OpenScreenState extends ConsumerState<OpenScreen> {
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => const OpenDetails(),
+                                fullscreenDialog: true,
+                                builder: (context) => OpenDetails(
+                                  postigDate: openbugList[index].postigDate,
+                                  bugCode: openbugList[index].bugCode,
+                                  title: openbugList[index].title,
+                                  pageUrl: openbugList[index].pageUrl,
+                                  description: openbugList[index].description,
+                                  image: openbugList[index].image,
+                                ),
                               ),
                             );
                           },
@@ -221,7 +192,7 @@ class _OpenScreenState extends ConsumerState<OpenScreen> {
                                                 .bodyMedium,
                                           ),
                                           Text(
-                                            openbugList[index].status,
+                                            openbugList[index].status.toUpperCase(),
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyMedium!
@@ -275,31 +246,6 @@ class _OpenScreenState extends ConsumerState<OpenScreen> {
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  // Align(
-                                  //   alignment: Alignment.bottomRight,
-                                  //   child: InkWell(
-                                  //     onTap: () {
-                                  //       showDialog(
-                                  //         context: context,
-                                  //         builder: (BuildContext context) =>
-                                  //             AlertDialog(
-                                  //           content: Container(
-                                  //             decoration: BoxDecoration(
-                                  //               borderRadius:
-                                  //                   BorderRadius.circular(20),
-                                  //             ),
-                                  //             width: double.infinity,
-                                  //             height: 200,
-                                  //           ),
-                                  //         ),
-                                  //       );
-                                  //     },
-                                  //     child: const Icon(
-                                  //       Icons.assignment_ind_sharp,
-                                  //       size: 30,
-                                  //     ),
-                                  //   ),
-                                  // ),
                                 ],
                               ),
                             ),

@@ -20,7 +20,7 @@ dependencies:
   get:
   lottie:
   easy_stepper:
-  flutter_riverpod:
+  flutter_riverpod: 2.1.1
   cupertino_icons: ^1.0.2
   rxdart:
   shared_preferences:
@@ -28,7 +28,8 @@ dependencies:
   firebase_core:
   firebase_messaging:
   flutter_easyloading:
-  go_router: 10.0.0
+  go_router: ^6.2.0
+  photo_view:
 
 flutter_icons:
   image_path: "assets/logo/errorLogo.png"

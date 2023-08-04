@@ -1,10 +1,15 @@
-// ignore_for_file: camel_case_types
+// ignore_for_file: camel_case_types, use_build_context_synchronously
+
+import 'dart:convert';
 
 import 'package:error/constans.dart';
+import 'package:error/src/features/home/domain/assignModel.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../utils/api_urls.dart';
 import '../../../utils/media-query.dart';
-import 'homeBody_Widget.dart';
+import '../../../widget/containerStyle.dart';
+import 'package:http/http.dart' as http;
 
 class Home_Page extends StatefulWidget {
   const Home_Page({super.key});
@@ -14,19 +19,107 @@ class Home_Page extends StatefulWidget {
 }
 
 class _Home_PageState extends State<Home_Page> {
-  DateTime? _dateTimeStart;
-  DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+  final scrollController = ScrollController();
+  var _isLoadingMore = false;
+  var _page = 0;
+  String assigned = 'assigned';
+  var _isLoading = true;
+  var comments = [];
+  List<AssignModel> assignBugList = [];
+  var _scrolling = false;
+  String? userName;
+  String? userType;
+  String? userImage;
+
   @override
   void initState() {
-    // TODO: implement initState
+    scrollController.addListener(_scrollListener);
+    _fetchAssignbug();
+    callSharedPrefs();
+    super.initState();
+  }
+
+  void callSharedPrefs() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     setState(() {
-      _dateTimeStart = DateTime.parse(dateFormat.format(DateTime.now()));
-      // _dateTimeEnd =
-      //     DateTime.parse(dateFormat.format(DateTime.parse(widget.date)));
+      userName = sharedPreferences.getString('userName')!;
+      userType = sharedPreferences.getString('userType')!;
+      userImage = sharedPreferences.getString('userImage')!;
     });
+  }
 
-    super.initState();
+  Future<void> _fetchAssignbug() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    var uri = Uri.parse(assignList);
+
+    var request = http.MultipartRequest('POST', uri);
+
+    request.fields['pageNo'] = _page.toString();
+    request.fields['limit'] = 8.toString();
+    request.fields['status'] = assigned;
+    print('Request Parameters: pageNo=$_page, limit=6, status=$assigned');
+
+    String? token = sharedPreferences.getString('token');
+    if (token != null) {
+      request.headers.addAll({'Authorization': 'Bearer $token'});
+    } else {
+      print('Token is null');
+    }
+
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      var response2 = await http.Response.fromStream(response);
+      var responseDecoded = json.decode(response2.body);
+      print({'responseeeeeeeeeeeee': responseDecoded});
+
+      setState(() {
+        comments = comments + responseDecoded['data'];
+        _isLoading = false;
+      });
+
+      assignBugList = comments
+          .map<AssignModel>(
+            (item) => AssignModel(
+              id: item['id'],
+              bugCode: item['bug_code'],
+              title: item['page_name'],
+              description: item['bug_description'],
+              image: item['image_url'] ?? '',
+              postigDate: item['created_at'],
+              status: item['status'],
+              pageUrl: item['page_url'],
+            ),
+          )
+          .toList();
+    } else {
+      if (_page > 0) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            elevation: 4,
+            behavior: SnackBarBehavior.floating,
+            content: Text(
+              'Reached the end of the list',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+        );
+        return;
+      } else {
+        setState(() {
+          _isLoading = false;
+          comments = [];
+          assignBugList = [];
+        });
+      }
+      print('no data');
+    }
   }
 
   @override
@@ -37,7 +130,7 @@ class _Home_PageState extends State<Home_Page> {
         backgroundColor: Theme.of(context).colorScheme.secondary,
         automaticallyImplyLeading: false,
         title: Text(
-          'Active List',
+          'Assigned list',
           style: Theme.of(context).textTheme.bodySmall!.copyWith(
                 color: Theme.of(context).hintColor,
                 fontSize: 20,
@@ -45,69 +138,170 @@ class _Home_PageState extends State<Home_Page> {
         ),
         actions: [
           InkWell(
-            onTap: () => showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2015),
-                    lastDate: DateTime.now().add(const Duration(days: 365)))
-                .then((value) {
-              setState(() {
-                _dateTimeStart = value;
-              });
-              print('DATE START: $_dateTimeStart');
-            }),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  content: ListTile(
+                    onTap: () {},
+                    leading: const Icon(Icons.logout_outlined),
+                    title: const Text('Log_out'),
+                  ),
+                ),
+              );
+            },
             child: Container(
-              height: SizeVariables.getHeight(context) * 0.03,
-              padding: EdgeInsets.only(
-                  left: SizeVariables.getWidth(context) * 0.02,
-                  right: SizeVariables.getWidth(context) * 0.01),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(40),
-                // color: mainColor,
-              ),
               child: Row(
                 children: [
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        _dateTimeStart == null
-                            ? 'Select Date'
-                            : '${dateFormat.format(DateTime.parse(_dateTimeStart.toString()))}',
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Theme.of(context).hintColor,
-                            ),
-                      ),
+                      Text(userName ?? 'Your name'),
                     ],
                   ),
-                  SizedBox(width: SizeVariables.getWidth(context) * 0.015),
+                  const SizedBox(width: 4),
+                  CircleAvatar(
+                    radius: SizeVariables.getHeight(context) * 0.02,
+                    backgroundImage: NetworkImage(
+                      userImage ?? '',
+                    ),
+                  ),
+                  const SizedBox(width: 5),
                 ],
-              ),
-            ),
-          ),
-          SizedBox(
-            width: SizeVariables.getWidth(context) * 0.012,
-          ),
-          Container(
-            padding: EdgeInsets.only(
-              right: SizeVariables.getWidth(context) * 0.025,
-              top: SizeVariables.getHeight(context) * 0.015,
-            ),
-            child: const Badge(
-              // smallSize: 4,
-              isLabelVisible: true,
-              // alignment: AlignmentDirectional.bottomStart,
-              label: Text('20'),
-              child: Icon(
-                Icons.notifications_active,
-                color: notificationiconColor,
-                size: 25,
               ),
             ),
           ),
         ],
       ),
-      body: const homeBody(),
+      body: (_isLoading)
+          ? const Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.amber,
+              ),
+            )
+          : (assignBugList.isEmpty)
+              ? const Center(
+                  child: Text('No Assign Bug List'),
+                )
+              : ListView.builder(
+                  controller: scrollController,
+                  itemCount: (_isLoadingMore)
+                      ? assignBugList.length + 1
+                      : assignBugList.length,
+                  itemBuilder: (context, index) {
+                    if (index < assignBugList.length) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 10),
+                        child: GestureDetector(
+                          onTap: () {
+                            // Get.toNamed(RoutesClass.getErordetailsRoute());
+                          },
+                          child: ContainerStyle(
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 22,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Status:  ',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium,
+                                          ),
+                                          Text(
+                                            assignBugList[index]
+                                                .status
+                                                .toUpperCase(),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium!
+                                                .copyWith(
+                                                  color: Colors.blueGrey,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                      Text(
+                                        assignBugList[index].postigDate,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: SizeVariables.getHeight(context) *
+                                        0.004,
+                                  ),
+                                  Text(
+                                    assignBugList[index].bugCode,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .copyWith(
+                                          fontSize: 16,
+                                          color: titletextColor,
+                                        ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  SizedBox(
+                                    height: SizeVariables.getHeight(context) *
+                                        0.006,
+                                  ),
+                                  Text(
+                                    assignBugList[index].description,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                          fontSize: 16,
+                                        ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  }),
     );
+  }
+
+  Future<void> _scrollListener() async {
+    if (_isLoadingMore) return;
+    if (scrollController.position.pixels ==
+        scrollController.position.maxScrollExtent) {
+      _scrolling = true;
+      setState(() {
+        _isLoadingMore = true;
+      });
+      _page = _page + 1;
+      await _fetchAssignbug();
+      setState(() {
+        _isLoadingMore = false;
+      });
+      print('call');
+    } else {
+      print('don\'t scrollllll');
+    }
   }
 }
