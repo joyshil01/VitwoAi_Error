@@ -1,14 +1,12 @@
-// ignore_for_file: file_names, must_be_immutable
+// ignore_for_file: file_names, must_be_immutable, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../../../constans.dart';
 import '../../../utils/media-query.dart';
 import '../../../widget/containerStyle.dart';
-import 'userWidget.dart';
 
-class OpenDetails extends StatefulWidget {
+class TodoDetails extends StatefulWidget {
   String postigDate;
   String title;
   String bugCode;
@@ -16,7 +14,7 @@ class OpenDetails extends StatefulWidget {
   String description;
   String image;
 
-  OpenDetails({
+  TodoDetails({
     required this.postigDate,
     required this.title,
     required this.bugCode,
@@ -26,40 +24,14 @@ class OpenDetails extends StatefulWidget {
   });
 
   @override
-  State<OpenDetails> createState() => _OpenDetailsState();
+  State<TodoDetails> createState() => _TodoDetailsState();
 }
 
-class _OpenDetailsState extends State<OpenDetails> {
-  void _openURL() async {
-    if (await canLaunch(widget.pageUrl)) {
-      await launch(widget.pageUrl, forceSafariVC: false, forceWebView: false);
-    } else {
-      throw 'Could not launch $widget.pageUrl';
-    }
-  }
-
+class _TodoDetailsState extends State<TodoDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              ),
-            ),
-            builder: (context) => const UserWidget(),
-          );
-        },
-        child: const Icon(
-          Icons.person_2_outlined,
-          size: 30,
-        ),
-      ),
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
         automaticallyImplyLeading: false,
@@ -185,7 +157,7 @@ class _OpenDetailsState extends State<OpenDetails> {
                           ),
                           Expanded(
                             child: TextButton(
-                              onPressed: _openURL,
+                              onPressed: () {},
                               child: Text(
                                 widget.pageUrl,
                                 overflow: TextOverflow.fade,

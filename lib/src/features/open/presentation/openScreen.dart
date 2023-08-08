@@ -199,7 +199,6 @@ class _OpenScreenState extends ConsumerState<OpenScreen> {
                                                 .textTheme
                                                 .bodyMedium!
                                                 .copyWith(
-                                                  fontSize: 16,
                                                   color: Colors.redAccent,
                                                 ),
                                           ),

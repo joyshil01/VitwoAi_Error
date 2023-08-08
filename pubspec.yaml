@@ -30,6 +30,7 @@ dependencies:
   flutter_easyloading:
   go_router: ^6.2.0
   photo_view:
+  url_launcher:
 
 flutter_icons:
   image_path: "assets/logo/errorLogo.png"

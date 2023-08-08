@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:error/constans.dart';
 import 'package:error/src/features/todo/domain/todoModel.dart';
+import 'package:error/src/features/todo/presentation/todoDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../utils/api_urls.dart';
@@ -51,7 +52,7 @@ class _TodoScreenState extends State<TodoScreen> {
   Future<void> _fetchTodobug() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-    var uri = Uri.parse(assignList);
+    var uri = Uri.parse(todoList);
 
     var request = http.MultipartRequest('POST', uri);
 
@@ -158,7 +159,18 @@ class _TodoScreenState extends State<TodoScreen> {
                             vertical: 5, horizontal: 10),
                         child: GestureDetector(
                           onTap: () {
-                            // Get.toNamed(RoutesClass.getErordetailsRoute());
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => TodoDetails(
+                                  postigDate: todoBugList[index].postigDate,
+                                  title: todoBugList[index].title,
+                                  bugCode: todoBugList[index].bugCode,
+                                  pageUrl: todoBugList[index].pageUrl,
+                                  description: todoBugList[index].description,
+                                  image: todoBugList[index].image,
+                                ),
+                              ),
+                            );
                           },
                           child: ContainerStyle(
                             child: Container(

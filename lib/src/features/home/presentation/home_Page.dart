@@ -1,7 +1,6 @@
-// ignore_for_file: camel_case_types, use_build_context_synchronously
+// ignore_for_file: camel_case_types, use_build_context_synchronously, file_names
 
 import 'dart:convert';
-
 import 'package:error/constans.dart';
 import 'package:error/src/features/home/domain/assignModel.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +9,7 @@ import '../../../utils/api_urls.dart';
 import '../../../utils/media-query.dart';
 import '../../../widget/containerStyle.dart';
 import 'package:http/http.dart' as http;
+import 'assignDetails.dart';
 
 class Home_Page extends StatefulWidget {
   const Home_Page({super.key});
@@ -154,26 +154,24 @@ class _Home_PageState extends State<Home_Page> {
                 ),
               );
             },
-            child: Container(
-              child: Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(userName ?? 'Your name'),
-                    ],
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(userName ?? 'Your name'),
+                  ],
+                ),
+                const SizedBox(width: 4),
+                CircleAvatar(
+                  radius: SizeVariables.getHeight(context) * 0.02,
+                  backgroundImage: NetworkImage(
+                    userImage ?? '',
                   ),
-                  const SizedBox(width: 4),
-                  CircleAvatar(
-                    radius: SizeVariables.getHeight(context) * 0.02,
-                    backgroundImage: NetworkImage(
-                      userImage ?? '',
-                    ),
-                  ),
-                  const SizedBox(width: 5),
-                ],
-              ),
+                ),
+                const SizedBox(width: 5),
+              ],
             ),
           ),
         ],
@@ -200,7 +198,18 @@ class _Home_PageState extends State<Home_Page> {
                             vertical: 5, horizontal: 10),
                         child: GestureDetector(
                           onTap: () {
-                            // Get.toNamed(RoutesClass.getErordetailsRoute());
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => AssignDetails(
+                                  postigDate: assignBugList[index].postigDate,
+                                  bugCode: assignBugList[index].bugCode,
+                                  title: assignBugList[index].title,
+                                  pageUrl: assignBugList[index].pageUrl,
+                                  description: assignBugList[index].description,
+                                  image: assignBugList[index].image,
+                                ),
+                              ),
+                            );
                           },
                           child: ContainerStyle(
                             child: Container(
