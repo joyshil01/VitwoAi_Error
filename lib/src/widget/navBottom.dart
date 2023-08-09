@@ -28,7 +28,7 @@ class _MainPageState extends State<MainPage> {
           OpenScreen(),
           Home_Page(),
           TodoScreen(),
-          // Complete_Screen(),
+          Complete_Screen(),
         ],
         items: _navBarsItems(),
         navBarStyle: NavBarStyle.style1,
@@ -59,13 +59,13 @@ class _MainPageState extends State<MainPage> {
         activeColorPrimary: Colors.amber,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
-      // PersistentBottomNavBarItem(
-      //   icon: const Icon(CupertinoIcons.checkmark_alt_circle),
-      //   title: ("Done"),
-      //   textStyle: Theme.of(context).textTheme.bodyMedium,
-      //   activeColorPrimary: Colors.green,
-      //   inactiveColorPrimary: CupertinoColors.systemGrey,
-      // ),
+      PersistentBottomNavBarItem(
+        icon: const Icon(CupertinoIcons.checkmark_alt_circle),
+        title: ("Done"),
+        textStyle: Theme.of(context).textTheme.bodyMedium,
+        activeColorPrimary: Colors.green,
+        inactiveColorPrimary: CupertinoColors.systemGrey,
+      ),
     ];
   }
 }

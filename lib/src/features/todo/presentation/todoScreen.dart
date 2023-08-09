@@ -145,7 +145,7 @@ class _TodoScreenState extends State<TodoScreen> {
             )
           : (todoBugList.isEmpty)
               ? const Center(
-                  child: Text('No Assign Bug List'),
+                  child: Text('No Todo Bug List'),
                 )
               : ListView.builder(
                   controller: scrollController,
