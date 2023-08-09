@@ -4,21 +4,25 @@ import 'dart:convert';
 import 'package:error/constans.dart';
 import 'package:error/src/features/home/domain/assignModel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../routing/app_router.dart';
 import '../../../utils/api_urls.dart';
 import '../../../utils/media-query.dart';
 import '../../../widget/containerStyle.dart';
 import 'package:http/http.dart' as http;
 import 'assignDetails.dart';
+import 'logoutController.dart';
 
-class Home_Page extends StatefulWidget {
+class Home_Page extends ConsumerStatefulWidget {
   const Home_Page({super.key});
 
   @override
-  State<Home_Page> createState() => _Home_PageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _Home_PageState();
 }
 
-class _Home_PageState extends State<Home_Page> {
+class _Home_PageState extends ConsumerState<Home_Page> {
   final scrollController = ScrollController();
   var _isLoadingMore = false;
   var _page = 0;
@@ -124,6 +128,18 @@ class _Home_PageState extends State<Home_Page> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<AsyncValue>(logoutVendorControllerProvider,
+        (previousState, state) {
+      if (!state.isLoading && state.hasError) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text(state.error.toString()),
+          backgroundColor: Colors.red,
+        ));
+      }
+    });
+
+    final state = ref.watch(logoutVendorControllerProvider);
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
@@ -147,9 +163,21 @@ class _Home_PageState extends State<Home_Page> {
                     borderRadius: BorderRadius.circular(16),
                   ),
                   content: ListTile(
-                    onTap: () {},
                     leading: const Icon(Icons.logout_outlined),
-                    title: const Text('Log_out'),
+                    title: Text('Log_out'.toUpperCase()),
+                    onTap: () async {
+                      final success = await ref
+                          .read(logoutVendorControllerProvider.notifier)
+                          .logoutVendor();
+                      if (success) {
+                        print('sucess---------------');
+                        SharedPreferences sharedPrefs =
+                            await SharedPreferences.getInstance();
+                        sharedPrefs.clear();
+                        context.goNamed(AppRoute.login.name);
+                      }
+                      //context.goNamed(AppRoute.logout.name);
+                    },
                   ),
                 ),
               );
@@ -291,7 +319,8 @@ class _Home_PageState extends State<Home_Page> {
                         ),
                       );
                     }
-                  }),
+                  },
+                ),
     );
   }
 
