@@ -84,10 +84,9 @@ class _UserWidgetState extends State<UserWidget> {
       if (submitData['status'] == 'success') {
         setState(() {
           //userSubmited = submitData['status'] ;
-          userSubmited.add( submitData['status'] );
-
+          userSubmited.add(submitData['status']);
         });
-        print('joyyyyyyyyyyyyy ${userSubmited}');
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
