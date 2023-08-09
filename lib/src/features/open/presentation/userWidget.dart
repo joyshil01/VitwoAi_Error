@@ -1,12 +1,18 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, use_build_context_synchronously
 
 import 'dart:convert';
+// import 'package:error/src/features/open/presentation/openScreen.dart';
+import 'package:error/src/features/open/presentation/openScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../utils/api_urls.dart';
 
 class UserWidget extends StatefulWidget {
-  const UserWidget({super.key});
+  String bugCode;
+  String id;
+
+  UserWidget({required this.bugCode, required this.id});
 
   @override
   State<UserWidget> createState() => _UserWidgetState();
@@ -14,6 +20,7 @@ class UserWidget extends StatefulWidget {
 
 class _UserWidgetState extends State<UserWidget> {
   List<dynamic> administrators = [];
+  List<dynamic> userSubmited = [];
   dynamic selectedAdministrator;
   TextEditingController durationController = TextEditingController();
 
@@ -25,7 +32,14 @@ class _UserWidgetState extends State<UserWidget> {
 
   Future<void> fetchAdministrators() async {
     var uri = Uri.parse(userList);
-    var response = await http.get(uri);
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String? tokenUser = sharedPreferences.getString('token');
+
+    var headersUser = {
+      'Authorization': 'Bearer $tokenUser',
+    };
+
+    var response = await http.get(uri, headers: headersUser);
 
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
@@ -36,6 +50,89 @@ class _UserWidgetState extends State<UserWidget> {
           selectedAdministrator = administrators[0];
         });
       }
+    }
+  }
+
+  Future<void> fetchUserSubmit(
+      String bugId, String userKey, String duration) async {
+    print('Arguments: id: ${bugId} key: ${userKey} time: ${duration}');
+
+    // var url = '$userSubmit/taskAssign&bug_id=$bugId&user_id=$userKey&duration=$duration';
+
+    var endpoint =
+        'taskAssign&bug_id=${int.parse(bugId)}&user_id=${int.parse(userKey)}&duration=${int.parse(duration)}';
+
+    print('URL: $userSubmit$endpoint');
+
+    var uri = Uri.parse('$userSubmit$endpoint');
+
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String? token = sharedPreferences.getString('token');
+
+    print('TOKENNNNN: $token');
+
+    var headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json'
+    };
+
+    var response2 = await http.get(uri, headers: headers);
+
+    if (response2.statusCode == 200) {
+      var submitData = json.decode(response2.body) as Map<String, dynamic>;
+      print('dataaaaaaaaaaa:  ${submitData}');
+      if (submitData['status'] == 'success') {
+        setState(() {
+          //userSubmited = submitData['status'] ;
+          userSubmited.add( submitData['status'] );
+
+        });
+        print('joyyyyyyyyyyyyy ${userSubmited}');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Task Assigned successfully',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(fontSize: 16, color: Colors.white),
+            ),
+            elevation: 5,
+            backgroundColor: Colors.green.shade200,
+            duration: const Duration(milliseconds: 1500),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+          ),
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const OpenScreen(),
+          ),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Not assigned...',
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .copyWith(fontSize: 16, color: Colors.white),
+          ),
+          elevation: 5,
+          backgroundColor: Colors.red.shade200,
+          duration: const Duration(milliseconds: 1500),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+      );
+      Navigator.of(context);
     }
   }
 
@@ -153,10 +250,11 @@ class _UserWidgetState extends State<UserWidget> {
                               .copyWith(fontSize: 16, color: Colors.white),
                         ),
                         elevation: 5,
-                        backgroundColor: Colors.red.shade300,
+                        backgroundColor: Colors.red.shade200,
+                        duration: const Duration(milliseconds: 1500),
                         behavior: SnackBarBehavior.floating,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(16),
                         ),
                       ),
                     );
@@ -167,7 +265,18 @@ class _UserWidgetState extends State<UserWidget> {
 
                     print('Selected Administrator Key: $selectedAdminKey');
                     print('Entered Duration: $enteredDuration');
-                    Navigator.pop(context);
+                    fetchUserSubmit(
+                      widget.id,
+                      selectedAdminKey,
+                      durationController.text,
+                    );
+                    print('userrr idddddd:  ${widget.id}');
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => const OpenScreen(),
+                    //   ),
+                    // );
                   }
                 },
               ),

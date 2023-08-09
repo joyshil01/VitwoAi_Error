@@ -15,6 +15,7 @@ class OpenDetails extends StatefulWidget {
   String pageUrl;
   String description;
   String image;
+  String id;
 
   OpenDetails({
     required this.postigDate,
@@ -23,6 +24,7 @@ class OpenDetails extends StatefulWidget {
     required this.pageUrl,
     required this.description,
     required this.image,
+    required this.id,
   });
 
   @override
@@ -52,7 +54,10 @@ class _OpenDetailsState extends State<OpenDetails> {
                 topRight: Radius.circular(20),
               ),
             ),
-            builder: (context) => const UserWidget(),
+            builder: (context) => UserWidget(
+              bugCode: widget.bugCode,
+              id: widget.id,
+            ),
           );
         },
         child: const Icon(

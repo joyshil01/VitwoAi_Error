@@ -88,6 +88,7 @@ class _OpenScreenState extends ConsumerState<OpenScreen> {
               postigDate: item['created_at'],
               status: item['status'],
               pageUrl: item['page_url'],
+              createUser: item['created_user'] ?? 'Null',
             ),
           )
           .toList();
@@ -166,6 +167,7 @@ class _OpenScreenState extends ConsumerState<OpenScreen> {
                                   pageUrl: openbugList[index].pageUrl,
                                   description: openbugList[index].description,
                                   image: openbugList[index].image,
+                                  id: openbugList[index].id,
                                 ),
                               ),
                             );
@@ -213,6 +215,29 @@ class _OpenScreenState extends ConsumerState<OpenScreen> {
                                                 .bodyMedium,
                                           ),
                                         ],
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: SizeVariables.getHeight(context) *
+                                        0.004,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Created:  ',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                      ),
+                                      Text(
+                                        openbugList[index].createUser,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .copyWith(
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                       ),
                                     ],
                                   ),

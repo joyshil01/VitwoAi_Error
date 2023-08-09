@@ -9,6 +9,7 @@ class OpenModel {
   final String postigDate;
   final String status;
   final String pageUrl;
+  final String createUser;
 
   OpenModel({
     required this.id,
@@ -19,5 +20,6 @@ class OpenModel {
     required this.postigDate,
     required this.status,
     required this.pageUrl,
+    required this.createUser,
   });
 }
