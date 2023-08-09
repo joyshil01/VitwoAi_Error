@@ -1,12 +1,16 @@
-// ignore_for_file: file_names, must_be_immutable
+// ignore_for_file: file_names, must_be_immutable, use_build_context_synchronously
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:http/http.dart' as http;
 import '../../../../constans.dart';
+import '../../../utils/api_urls.dart';
 import '../../../utils/media-query.dart';
 import '../../../widget/containerStyle.dart';
+import 'Complete_Screen.dart';
 
 class CompleteDetails extends StatefulWidget {
   String postigDate;
@@ -36,12 +40,69 @@ class CompleteDetails extends StatefulWidget {
   State<CompleteDetails> createState() => _CompleteDetailsState();
 }
 
+const List<String> list = <String>['Solved', 'Todo', 'Assigned'];
+
 class _CompleteDetailsState extends State<CompleteDetails> {
   void _openURL() async {
     if (await canLaunch(widget.pageUrl)) {
       await launch(widget.pageUrl, forceSafariVC: false, forceWebView: false);
     } else {
       throw 'Could not launch $widget.pageUrl';
+    }
+  }
+
+  String dropdownValue = list.first;
+
+  Future<void> updateStatus(String bugId, String statusSlug) async {
+    print('Arguments: id: ${bugId} Status: ${statusSlug}');
+
+    var endpoints =
+        'bugstatusupdate&bug_id=${int.parse(bugId)}&statusSlug=$statusSlug';
+
+    print('URL: $statusUpdate$endpoints');
+
+    var uri = Uri.parse('$statusUpdate$endpoints');
+
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String? tokenUser = sharedPreferences.getString('token');
+
+    var headersUser = {
+      'Authorization': 'Bearer $tokenUser',
+      'Content-Type': 'application/json'
+    };
+
+    var response = await http.get(uri, headers: headersUser);
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> responseData = json.decode(response.body);
+      if (responseData['status'] == 'success') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Successfully updated',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(fontSize: 16, color: Colors.white),
+            ),
+            elevation: 5,
+            backgroundColor: Colors.green.shade200,
+            duration: const Duration(milliseconds: 1500),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+          ),
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Complete_Screen(),
+          ),
+        );
+      } else {
+        print('nooo dataaaaaaaaaaaaaaaaaa');
+      }
     }
   }
 
@@ -87,6 +148,39 @@ class _CompleteDetailsState extends State<CompleteDetails> {
             ),
           ],
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: DropdownButton<String>(
+              dropdownColor: Colors.blueGrey,
+              value: dropdownValue,
+              icon: const Icon(
+                Icons.arrow_downward,
+                color: Colors.white,
+                size: 16,
+              ),
+              elevation: 16,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(color: Colors.white),
+              underline: Container(),
+              onChanged: (String? value) async {
+                setState(() {
+                  dropdownValue = value!;
+                  print('Statusssssssssssssssss:    $value');
+                  updateStatus(widget.id, value.toLowerCase());
+                });
+              },
+              items: list.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(

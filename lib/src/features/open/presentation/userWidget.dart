@@ -83,7 +83,6 @@ class _UserWidgetState extends State<UserWidget> {
       print('dataaaaaaaaaaa:  ${submitData}');
       if (submitData['status'] == 'success') {
         setState(() {
-          //userSubmited = submitData['status'] ;
           userSubmited.add(submitData['status']);
         });
 

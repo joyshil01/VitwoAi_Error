@@ -26,7 +26,6 @@ class _TodoScreenState extends State<TodoScreen> {
   var _isLoading = true;
   var comments = [];
   List<TodoModel> todoBugList = [];
-  var _scrolling = false;
   String? userName;
   String? userType;
   String? userImage;
@@ -168,6 +167,7 @@ class _TodoScreenState extends State<TodoScreen> {
                                   pageUrl: todoBugList[index].pageUrl,
                                   description: todoBugList[index].description,
                                   image: todoBugList[index].image,
+                                  id: todoBugList[index].id,
                                 ),
                               ),
                             );
@@ -260,7 +260,6 @@ class _TodoScreenState extends State<TodoScreen> {
     if (_isLoadingMore) return;
     if (scrollController.position.pixels ==
         scrollController.position.maxScrollExtent) {
-      _scrolling = true;
       setState(() {
         _isLoadingMore = true;
       });

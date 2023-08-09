@@ -8,3 +8,4 @@ const todoList = '$baseURL/list-items.php';
 const solvedList = '$baseURL/list-items.php';
 const userList = '$baseURL/othersapi.php?action=userlist';
 const userSubmit = '$baseURL/othersapi.php?action=';
+const statusUpdate = '$baseURL/othersapi.php?action=';

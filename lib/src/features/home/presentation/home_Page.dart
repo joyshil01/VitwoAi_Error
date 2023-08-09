@@ -30,7 +30,6 @@ class _Home_PageState extends ConsumerState<Home_Page> {
   var _isLoading = true;
   var comments = [];
   List<AssignModel> assignBugList = [];
-  var _scrolling = false;
   String? userName;
   String? userType;
   String? userImage;
@@ -176,7 +175,6 @@ class _Home_PageState extends ConsumerState<Home_Page> {
                         sharedPrefs.clear();
                         context.goNamed(AppRoute.login.name);
                       }
-                      //context.goNamed(AppRoute.logout.name);
                     },
                   ),
                 ),
@@ -235,6 +233,9 @@ class _Home_PageState extends ConsumerState<Home_Page> {
                                   pageUrl: assignBugList[index].pageUrl,
                                   description: assignBugList[index].description,
                                   image: assignBugList[index].image,
+                                  id: assignBugList[index].id,
+                                  status: assignBugList[index].status,
+                                  assignBugList: assignBugList,
                                 ),
                               ),
                             );
@@ -328,7 +329,6 @@ class _Home_PageState extends ConsumerState<Home_Page> {
     if (_isLoadingMore) return;
     if (scrollController.position.pixels ==
         scrollController.position.maxScrollExtent) {
-      _scrolling = true;
       setState(() {
         _isLoadingMore = true;
       });

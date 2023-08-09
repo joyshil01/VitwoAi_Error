@@ -1,10 +1,16 @@
-// ignore_for_file: file_names, must_be_immutable, use_key_in_widget_constructors
+// ignore_for_file: file_names, must_be_immutable, use_key_in_widget_constructors, use_build_context_synchronously
 
+import 'dart:convert';
+import 'package:error/src/features/home/presentation/home_Page.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../constans.dart';
+import '../../../utils/api_urls.dart';
 import '../../../utils/media-query.dart';
 import '../../../widget/containerStyle.dart';
+import 'package:http/http.dart' as http;
+import '../domain/assignModel.dart';
 
 class AssignDetails extends StatefulWidget {
   String postigDate;
@@ -13,21 +19,83 @@ class AssignDetails extends StatefulWidget {
   String pageUrl;
   String description;
   String image;
+  String id;
+  String status;
+  List<AssignModel> assignBugList;
 
-  AssignDetails({
-    required this.postigDate,
-    required this.title,
-    required this.bugCode,
-    required this.pageUrl,
-    required this.description,
-    required this.image,
-  });
+  AssignDetails(
+      {required this.postigDate,
+      required this.title,
+      required this.bugCode,
+      required this.pageUrl,
+      required this.description,
+      required this.image,
+      required this.id,
+      required this.status,
+      required this.assignBugList});
 
   @override
   State<AssignDetails> createState() => _AssignDetailsState();
 }
 
+const List<String> list = <String>['Assigned', 'Todo', 'Solved'];
+
 class _AssignDetailsState extends State<AssignDetails> {
+  String dropdownValue = list.first;
+
+  Future<void> updateStatus(String bugId, String statusSlug) async {
+    print('Arguments: id: ${bugId} Status: ${statusSlug}');
+
+    var endpoints =
+        'bugstatusupdate&bug_id=${int.parse(bugId)}&statusSlug=$statusSlug';
+
+    print('URL: $statusUpdate$endpoints');
+
+    var uri = Uri.parse('$statusUpdate$endpoints');
+
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String? tokenUser = sharedPreferences.getString('token');
+
+    var headersUser = {
+      'Authorization': 'Bearer $tokenUser',
+      'Content-Type': 'application/json'
+    };
+
+    var response = await http.get(uri, headers: headersUser);
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> responseData = json.decode(response.body);
+      if (responseData['status'] == 'success') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Successfully updated',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(fontSize: 16, color: Colors.white),
+            ),
+            elevation: 5,
+            backgroundColor: Colors.green.shade200,
+            duration: const Duration(milliseconds: 1500),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+          ),
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Home_Page(),
+          ),
+        );
+      } else {
+        print('nooo dataaaaaaaaaaaaaaaaaa');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,6 +138,39 @@ class _AssignDetailsState extends State<AssignDetails> {
             ),
           ],
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: DropdownButton<String>(
+              dropdownColor: Colors.blueGrey,
+              value: dropdownValue,
+              icon: const Icon(
+                Icons.arrow_downward,
+                color: Colors.white,
+                size: 16,
+              ),
+              elevation: 16,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(color: Colors.white),
+              underline: Container(),
+              onChanged: (String? value) async {
+                setState(() {
+                  dropdownValue = value!;
+                  print('Statusssssssssssssssss:    $value');
+                  updateStatus(widget.id, value.toLowerCase());
+                });
+              },
+              items: list.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
