@@ -90,6 +90,8 @@ class _TodoScreenState extends State<TodoScreen> {
               postigDate: item['created_at'],
               status: item['status'],
               pageUrl: item['page_url'],
+              createUser: item['created_user'] ?? 'Null',
+              todoName: item['fldAdminName'],
             ),
           )
           .toList();
@@ -185,32 +187,74 @@ class _TodoScreenState extends State<TodoScreen> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Row(
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            'Status:  ',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium,
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'Created: ',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium,
+                                              ),
+                                              Text(
+                                                todoBugList[index].createUser,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium!
+                                                    .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                    ),
+                                              )
+                                            ],
                                           ),
                                           Text(
-                                            todoBugList[index]
-                                                .status
-                                                .toUpperCase(),
+                                            todoBugList[index].postigDate,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyMedium!
                                                 .copyWith(
-                                                  color: Colors.amber,
+                                                  color:
+                                                      Colors.redAccent.shade100,
                                                 ),
                                           ),
                                         ],
                                       ),
-                                      Text(
-                                        todoBugList[index].postigDate,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium,
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'Status:  ',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium,
+                                              ),
+                                              Text(
+                                                todoBugList[index]
+                                                    .status
+                                                    .toUpperCase(),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium!
+                                                    .copyWith(
+                                                      color: Colors.amber,
+                                                    ),
+                                              ),
+                                            ],
+                                          ),
+                                          Text(
+                                            todoBugList[index].todoName,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium,
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),

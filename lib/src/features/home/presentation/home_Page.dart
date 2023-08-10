@@ -94,6 +94,8 @@ class _Home_PageState extends ConsumerState<Home_Page> {
               postigDate: item['created_at'],
               status: item['status'],
               pageUrl: item['page_url'],
+              createUser: item['created_user'] ?? 'Null',
+              assignedName: item['fldAdminName'],
             ),
           )
           .toList();
@@ -253,32 +255,74 @@ class _Home_PageState extends ConsumerState<Home_Page> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Row(
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            'Status:  ',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium,
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'Created: ',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium,
+                                              ),
+                                              Text(
+                                                assignBugList[index].createUser,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium!
+                                                    .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                              ),
+                                            ],
                                           ),
                                           Text(
-                                            assignBugList[index]
-                                                .status
-                                                .toUpperCase(),
+                                            assignBugList[index].postigDate,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyMedium!
                                                 .copyWith(
-                                                  color: Colors.blueGrey,
+                                                  color:
+                                                      Colors.redAccent.shade100,
                                                 ),
                                           ),
                                         ],
                                       ),
-                                      Text(
-                                        assignBugList[index].postigDate,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium,
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'Status:  ',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium,
+                                              ),
+                                              Text(
+                                                assignBugList[index]
+                                                    .status
+                                                    .toUpperCase(),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium!
+                                                    .copyWith(
+                                                      color: Colors.blueGrey,
+                                                    ),
+                                              ),
+                                            ],
+                                          ),
+                                          Text(
+                                            assignBugList[index].assignedName,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium,
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),

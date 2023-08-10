@@ -9,6 +9,8 @@ class AssignModel {
   final String postigDate;
   final String status;
   final String pageUrl;
+  final String createUser;
+  final String assignedName;
 
   AssignModel({
     required this.id,
@@ -19,5 +21,7 @@ class AssignModel {
     required this.postigDate,
     required this.status,
     required this.pageUrl,
+    required this.createUser,
+    required this.assignedName,
   });
 }

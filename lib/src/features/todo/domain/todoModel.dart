@@ -9,6 +9,8 @@ class TodoModel {
   final String postigDate;
   final String status;
   final String pageUrl;
+  final String createUser;
+  final String todoName;
 
   TodoModel({
     required this.id,
@@ -19,5 +21,7 @@ class TodoModel {
     required this.postigDate,
     required this.status,
     required this.pageUrl,
+    required this.createUser,
+    required this.todoName,
   });
 }
