@@ -38,6 +38,20 @@ const List<String> list = <String>['Todo', 'Assigned', 'Solved'];
 
 class _TodoDetailsState extends State<TodoDetails> {
   String dropdownValue = list.first;
+  bool role = false;
+
+  @override
+  void initState() {
+    userRole();
+    super.initState();
+  }
+
+  void userRole() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    setState(() {
+      role = localStorage.getString('userType') == 'Viewer' ? true : false;
+    });
+  }
 
   Future<void> updateStatus(String bugId, String statusSlug) async {
     print('Arguments: id: ${bugId} Status: ${statusSlug}');
@@ -87,7 +101,24 @@ class _TodoDetailsState extends State<TodoDetails> {
           ),
         );
       } else {
-        print('nooo dataaaaaaaaaaaaaaaaaa');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Task not updated',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(fontSize: 16, color: Colors.white),
+            ),
+            elevation: 5,
+            backgroundColor: Colors.red.shade200,
+            duration: const Duration(milliseconds: 1500),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+          ),
+        );
       }
     }
   }
@@ -135,37 +166,48 @@ class _TodoDetailsState extends State<TodoDetails> {
           ],
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: DropdownButton<String>(
-              dropdownColor: Colors.blueGrey,
-              value: dropdownValue,
-              icon: const Icon(
-                Icons.arrow_downward,
-                color: Colors.white,
-                size: 16,
-              ),
-              elevation: 16,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(color: Colors.white),
-              underline: Container(),
-              onChanged: (String? value) async {
-                setState(() {
-                  dropdownValue = value!;
-                  print('Statusssssssssssssssss:    $value');
-                  updateStatus(widget.id, value.toLowerCase());
-                });
-              },
-              items: list.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-          )
+          role == true
+              ? Padding(
+                  padding: const EdgeInsets.only(right: 12, top: 16),
+                  child: Text(
+                    'Todo',
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: DropdownButton<String>(
+                    dropdownColor: Colors.blueGrey,
+                    value: dropdownValue,
+                    icon: const Icon(
+                      Icons.arrow_downward,
+                      color: Colors.white,
+                      size: 16,
+                    ),
+                    elevation: 16,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .copyWith(color: Colors.white),
+                    underline: Container(),
+                    onChanged: (String? value) async {
+                      setState(() {
+                        dropdownValue = value!;
+                        print('Statusssssssssssssssss:    $value');
+                        updateStatus(widget.id, value.toLowerCase());
+                      });
+                    },
+                    items: list.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                )
         ],
       ),
       body: SingleChildScrollView(

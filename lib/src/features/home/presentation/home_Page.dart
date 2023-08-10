@@ -172,10 +172,7 @@ class _Home_PageState extends ConsumerState<Home_Page> {
                         print('sucess---------------');
                         SharedPreferences sharedPrefs =
                             await SharedPreferences.getInstance();
-                        sharedPrefs.clear().then((value) {
-                          print(
-                              'ROLEEEEEE: ${sharedPrefs.getString('userType')}');
-                        });
+                        sharedPrefs.clear();
                         context.goNamed(AppRoute.login.name);
                       }
                     },

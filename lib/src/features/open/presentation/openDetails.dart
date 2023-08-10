@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../constans.dart';
 import '../../../utils/media-query.dart';
@@ -40,31 +41,48 @@ class _OpenDetailsState extends State<OpenDetails> {
     }
   }
 
+  bool role = false;
+
+  @override
+  void initState() {
+    userRole();
+    super.initState();
+  }
+
+  void userRole() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    setState(() {
+      role = localStorage.getString('userType') == 'Viewer' ? true : false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
+      floatingActionButton: role == true
+          ? Container()
+          : FloatingActionButton(
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+                  builder: (context) => UserWidget(
+                    bugCode: widget.bugCode,
+                    id: widget.id,
+                  ),
+                );
+              },
+              child: const Icon(
+                Icons.person_2_outlined,
+                size: 30,
               ),
             ),
-            builder: (context) => UserWidget(
-              bugCode: widget.bugCode,
-              id: widget.id,
-            ),
-          );
-        },
-        child: const Icon(
-          Icons.person_2_outlined,
-          size: 30,
-        ),
-      ),
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
         automaticallyImplyLeading: false,

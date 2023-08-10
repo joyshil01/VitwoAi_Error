@@ -29,7 +29,11 @@ class _MainPageState extends State<MainPage> {
   void userRole() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     setState(() {
-      role = localStorage.getString('userType') == 'Approver' ? true : false;
+      role = localStorage.getString('userType') == 'Approver'
+          ? true
+          : localStorage.getString('userType') == 'Viewer'
+              ? true
+              : false;
     });
   }
 
