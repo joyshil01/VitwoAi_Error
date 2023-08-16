@@ -5,20 +5,26 @@ import 'package:error/constans.dart';
 import 'package:error/src/features/todo/domain/todoModel.dart';
 import 'package:error/src/features/todo/presentation/todoDetails.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../routing/app_router.dart';
 import '../../../utils/api_urls.dart';
 import '../../../utils/media-query.dart';
 import '../../../widget/containerStyle.dart';
 import 'package:http/http.dart' as http;
 
-class TodoScreen extends StatefulWidget {
+import '../../home/presentation/logoutController.dart';
+
+class TodoScreen extends ConsumerStatefulWidget {
   const TodoScreen({super.key});
 
   @override
-  State<TodoScreen> createState() => _TodoScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _TodoScreenState();
 }
 
-class _TodoScreenState extends State<TodoScreen> {
+class _TodoScreenState extends ConsumerState<TodoScreen> {
   final scrollController = ScrollController();
   var _isLoadingMore = false;
   var _page = 0;
@@ -123,8 +129,29 @@ class _TodoScreenState extends State<TodoScreen> {
     }
   }
 
+  Future<void> refresh() async {
+    await _fetchTodobug().then((_) {
+      setState(() {
+        _isLoading = false;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    ref.listen<AsyncValue>(logoutVendorControllerProvider,
+        (previousState, state) {
+      if (!state.isLoading && state.hasError) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text(state.error.toString()),
+          backgroundColor: Colors.red,
+        ));
+      }
+    });
+
+    final state = ref.watch(logoutVendorControllerProvider);
+    var height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
@@ -137,166 +164,231 @@ class _TodoScreenState extends State<TodoScreen> {
                 fontSize: 20,
               ),
         ),
+        actions: [
+          InkWell(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  content: ListTile(
+                    leading: const Icon(Icons.logout_outlined),
+                    title: Text('Log_out'.toUpperCase()),
+                    onTap: () async {
+                      final success = await ref
+                          .read(logoutVendorControllerProvider.notifier)
+                          .logoutVendor();
+                      if (success) {
+                        print('sucess---------------');
+                        SharedPreferences sharedPrefs =
+                            await SharedPreferences.getInstance();
+                        sharedPrefs.clear();
+                        context.goNamed(AppRoute.login.name);
+                      }
+                    },
+                  ),
+                ),
+              );
+            },
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(userName ?? 'Your name'),
+                  ],
+                ),
+                const SizedBox(width: 4),
+                CircleAvatar(
+                  radius: SizeVariables.getHeight(context) * 0.02,
+                  backgroundImage: NetworkImage(
+                    userImage ?? '',
+                  ),
+                ),
+                const SizedBox(width: 5),
+              ],
+            ),
+          ),
+        ],
       ),
-      body: (_isLoading)
-          ? const Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.amber,
-              ),
-            )
-          : (todoBugList.isEmpty)
-              ? const Center(
-                  child: Text('No Todo Bug List'),
-                )
-              : ListView.builder(
-                  controller: scrollController,
-                  itemCount: (_isLoadingMore)
-                      ? todoBugList.length + 1
-                      : todoBugList.length,
-                  itemBuilder: (context, index) {
-                    if (index < todoBugList.length) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 10),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => TodoDetails(
-                                  postigDate: todoBugList[index].postigDate,
-                                  title: todoBugList[index].title,
-                                  bugCode: todoBugList[index].bugCode,
-                                  pageUrl: todoBugList[index].pageUrl,
-                                  description: todoBugList[index].description,
-                                  image: todoBugList[index].image,
-                                  id: todoBugList[index].id,
+      body: RefreshIndicator(
+        onRefresh: refresh,
+        backgroundColor: Colors.white,
+        child: (_isLoading)
+            ? const Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.amber,
+                ),
+              )
+            : (todoBugList.isEmpty)
+                ? Column(
+                    children: [
+                      Lottie.asset(
+                        'assets/json/noData.json',
+                        height: height * 0.4,
+                      ),
+                      const Center(
+                        child: Text('No Todo Bug List'),
+                      ),
+                    ],
+                  )
+                : ListView.builder(
+                    controller: scrollController,
+                    itemCount: (_isLoadingMore)
+                        ? todoBugList.length + 1
+                        : todoBugList.length,
+                    itemBuilder: (context, index) {
+                      if (index < todoBugList.length) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 10),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => TodoDetails(
+                                    postigDate: todoBugList[index].postigDate,
+                                    title: todoBugList[index].title,
+                                    bugCode: todoBugList[index].bugCode,
+                                    pageUrl: todoBugList[index].pageUrl,
+                                    description: todoBugList[index].description,
+                                    image: todoBugList[index].image,
+                                    id: todoBugList[index].id,
+                                    status: todoBugList[index].status,
+                                    createUser: todoBugList[index].createUser,
+                                    todoName: todoBugList[index].todoName,
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                          child: ContainerStyle(
-                            child: Container(
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 22,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                'Created: ',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium,
-                                              ),
-                                              Text(
-                                                todoBugList[index].createUser,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium!
-                                                    .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                    ),
-                                              )
-                                            ],
-                                          ),
-                                          Text(
-                                            todoBugList[index].postigDate,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium!
-                                                .copyWith(
-                                                  color:
-                                                      Colors.redAccent.shade100,
+                              );
+                            },
+                            child: ContainerStyle(
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 22,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'Created: ',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium,
                                                 ),
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                'Status:  ',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium,
-                                              ),
-                                              Text(
-                                                todoBugList[index]
-                                                    .status
-                                                    .toUpperCase(),
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium!
-                                                    .copyWith(
-                                                      color: Colors.amber,
-                                                    ),
-                                              ),
-                                            ],
-                                          ),
-                                          Text(
-                                            todoBugList[index].todoName,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: SizeVariables.getHeight(context) *
-                                        0.004,
-                                  ),
-                                  Text(
-                                    todoBugList[index].bugCode,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall!
-                                        .copyWith(
-                                          fontSize: 16,
-                                          color: titletextColor,
+                                                Text(
+                                                  todoBugList[index].createUser,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium!
+                                                      .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      ),
+                                                )
+                                              ],
+                                            ),
+                                            Text(
+                                              todoBugList[index].postigDate,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium!
+                                                  .copyWith(
+                                                    color: Colors
+                                                        .redAccent.shade100,
+                                                  ),
+                                            ),
+                                          ],
                                         ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  SizedBox(
-                                    height: SizeVariables.getHeight(context) *
-                                        0.006,
-                                  ),
-                                  Text(
-                                    todoBugList[index].description,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .copyWith(
-                                          fontSize: 16,
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'Status:  ',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium,
+                                                ),
+                                                Text(
+                                                  todoBugList[index]
+                                                      .status
+                                                      .toUpperCase(),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium!
+                                                      .copyWith(
+                                                        color: Colors.amber,
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
+                                            Text(
+                                              todoBugList[index].todoName,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
+                                            ),
+                                          ],
                                         ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: SizeVariables.getHeight(context) *
+                                          0.004,
+                                    ),
+                                    Text(
+                                      todoBugList[index].bugCode,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .copyWith(
+                                            fontSize: 16,
+                                            color: titletextColor,
+                                          ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    SizedBox(
+                                      height: SizeVariables.getHeight(context) *
+                                          0.006,
+                                    ),
+                                    Text(
+                                      todoBugList[index].description,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                            fontSize: 16,
+                                          ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    }
-                  }),
+                        );
+                      }
+                    }),
+      ),
     );
   }
 

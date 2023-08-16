@@ -17,9 +17,9 @@ dependencies:
   animated_splash_screen:
   flutter_launcher_icons:
   intl:
-  get:
+  # get:
   lottie:
-  easy_stepper:
+  # easy_stepper:
   flutter_riverpod: 2.1.1
   cupertino_icons: ^1.0.2
   rxdart:
@@ -29,7 +29,7 @@ dependencies:
   firebase_messaging:
   flutter_easyloading:
   go_router: ^6.2.0
-  photo_view:
+  # photo_view:
   url_launcher:
 
 flutter_icons:

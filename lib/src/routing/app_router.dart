@@ -34,7 +34,7 @@ final goRouter = GoRouter(
       path: '/bottom-nav',
       name: AppRoute.home.name,
       pageBuilder: (context, state) => MaterialPage(
-        child: MainPage(),
+        child: const MainPage(),
         fullscreenDialog: true,
         key: state.pageKey,
       ),

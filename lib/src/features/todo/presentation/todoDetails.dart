@@ -2,13 +2,12 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../constans.dart';
 import '../../../utils/api_urls.dart';
 import '../../../utils/media-query.dart';
 import '../../../widget/containerStyle.dart';
-import 'todoScreen.dart';
+import '../../../widget/navBottom.dart';
 import 'package:http/http.dart' as http;
 
 class TodoDetails extends StatefulWidget {
@@ -19,6 +18,9 @@ class TodoDetails extends StatefulWidget {
   String description;
   String image;
   String id;
+  String status;
+  String createUser;
+  String todoName;
 
   TodoDetails({
     required this.postigDate,
@@ -28,6 +30,9 @@ class TodoDetails extends StatefulWidget {
     required this.description,
     required this.image,
     required this.id,
+    required this.status,
+    required this.createUser,
+    required this.todoName,
   });
 
   @override
@@ -38,6 +43,7 @@ const List<String> list = <String>['Todo', 'Assigned', 'Solved'];
 
 class _TodoDetailsState extends State<TodoDetails> {
   String dropdownValue = list.first;
+  String selectValue = '';
   bool role = false;
 
   @override
@@ -97,7 +103,7 @@ class _TodoDetailsState extends State<TodoDetails> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const TodoScreen(),
+            builder: (context) => const MainPage(),
           ),
         );
       } else {
@@ -224,18 +230,64 @@ class _TodoDetailsState extends State<TodoDetails> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Created: ',
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                  Text(
+                                    widget.createUser,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                  )
+                                ],
+                              ),
                               Text(
                                 widget.postigDate,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium!
                                     .copyWith(
-                                      color: questionmarkColor,
-                                      fontSize: 12,
+                                      color: Colors.redAccent.shade100,
                                     ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Status:  ',
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                  Text(
+                                    widget.status.toUpperCase(),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                          color: Colors.amber,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                widget.todoName,
+                                style: Theme.of(context).textTheme.bodyMedium,
                               ),
                             ],
                           ),
@@ -309,16 +361,32 @@ class _TodoDetailsState extends State<TodoDetails> {
                   ),
                 ),
               ),
-              ContainerStyle(
-                child: Container(
-                  height: 200,
-                  child: PhotoView(
-                    imageProvider: NetworkImage(
-                      widget.image,
-                      scale: 1,
+              InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => Dialog(
+                      insetPadding: const EdgeInsets.all(10),
+                      child: Container(
+                        width: double.infinity,
+                        height: 400,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
+                        child: InteractiveViewer(
+                          maxScale: 10,
+                          child: Image.network(
+                            widget.image,
+                          ),
+                        ),
+                      ),
                     ),
-                    minScale: PhotoViewComputedScale.contained * 0.8,
-                    maxScale: PhotoViewComputedScale.covered * 2,
+                  );
+                },
+                child: ContainerStyle(
+                  child: Image.network(
+                    widget.image,
                   ),
                 ),
               ),

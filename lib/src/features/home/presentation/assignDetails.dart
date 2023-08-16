@@ -1,15 +1,14 @@
 // ignore_for_file: file_names, must_be_immutable, use_key_in_widget_constructors, use_build_context_synchronously
 
 import 'dart:convert';
-import 'package:error/src/features/home/presentation/home_Page.dart';
 import 'package:flutter/material.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../constans.dart';
 import '../../../utils/api_urls.dart';
 import '../../../utils/media-query.dart';
 import '../../../widget/containerStyle.dart';
 import 'package:http/http.dart' as http;
+import '../../../widget/navBottom.dart';
 import '../domain/assignModel.dart';
 
 class AssignDetails extends StatefulWidget {
@@ -21,18 +20,23 @@ class AssignDetails extends StatefulWidget {
   String image;
   String id;
   String status;
+  String createUser;
+  String assignedName;
   List<AssignModel> assignBugList;
 
-  AssignDetails(
-      {required this.postigDate,
-      required this.title,
-      required this.bugCode,
-      required this.pageUrl,
-      required this.description,
-      required this.image,
-      required this.id,
-      required this.status,
-      required this.assignBugList});
+  AssignDetails({
+    required this.postigDate,
+    required this.title,
+    required this.bugCode,
+    required this.pageUrl,
+    required this.description,
+    required this.image,
+    required this.id,
+    required this.status,
+    required this.assignBugList,
+    required this.createUser,
+    required this.assignedName,
+  });
 
   @override
   State<AssignDetails> createState() => _AssignDetailsState();
@@ -43,10 +47,14 @@ const List<String> list = <String>['Assigned', 'Todo', 'Solved'];
 class _AssignDetailsState extends State<AssignDetails> {
   String dropdownValue = list.first;
   bool role = false;
+  var _isLoading = true;
 
   @override
   void initState() {
     userRole();
+    setState(() {
+      _isLoading = false;
+    });
     super.initState();
   }
 
@@ -101,7 +109,7 @@ class _AssignDetailsState extends State<AssignDetails> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const Home_Page(),
+            builder: (context) => const MainPage(),
           ),
         );
       } else {
@@ -230,18 +238,64 @@ class _AssignDetailsState extends State<AssignDetails> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Created: ',
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                  Text(
+                                    widget.createUser,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                  ),
+                                ],
+                              ),
                               Text(
                                 widget.postigDate,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium!
                                     .copyWith(
-                                      color: questionmarkColor,
-                                      fontSize: 12,
+                                      color: Colors.redAccent.shade100,
                                     ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Status:  ',
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                  Text(
+                                    widget.status.toUpperCase(),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                          color: Colors.blueGrey,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                widget.assignedName,
+                                style: Theme.of(context).textTheme.bodyMedium,
                               ),
                             ],
                           ),
@@ -315,16 +369,32 @@ class _AssignDetailsState extends State<AssignDetails> {
                   ),
                 ),
               ),
-              ContainerStyle(
-                child: Container(
-                  height: 200,
-                  child: PhotoView(
-                    imageProvider: NetworkImage(
-                      widget.image,
-                      scale: 1,
+              InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => Dialog(
+                      insetPadding: const EdgeInsets.all(10),
+                      child: Container(
+                        width: double.infinity,
+                        height: 400,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
+                        child: InteractiveViewer(
+                          maxScale: 10,
+                          child: Image.network(
+                            widget.image,
+                          ),
+                        ),
+                      ),
                     ),
-                    minScale: PhotoViewComputedScale.contained * 0.8,
-                    maxScale: PhotoViewComputedScale.covered * 2,
+                  );
+                },
+                child: ContainerStyle(
+                  child: Image.network(
+                    widget.image,
                   ),
                 ),
               ),

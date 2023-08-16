@@ -1,7 +1,6 @@
 // ignore_for_file: file_names, must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../constans.dart';
@@ -17,6 +16,7 @@ class OpenDetails extends StatefulWidget {
   String description;
   String image;
   String id;
+  String createUser;
 
   OpenDetails({
     required this.postigDate,
@@ -26,6 +26,7 @@ class OpenDetails extends StatefulWidget {
     required this.description,
     required this.image,
     required this.id,
+    required this.createUser,
   });
 
   @override
@@ -136,20 +137,34 @@ class _OpenDetailsState extends State<OpenDetails> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
                             children: [
                               Text(
-                                widget.postigDate,
+                                'Create: ',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                              Text(
+                                widget.createUser,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium!
                                     .copyWith(
-                                      color: questionmarkColor,
-                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
                                     ),
                               ),
                             ],
+                          ),
+                          Text(
+                            widget.postigDate,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: questionmarkColor,
+                                  fontSize: 12,
+                                ),
                           ),
                         ],
                       ),
@@ -221,16 +236,36 @@ class _OpenDetailsState extends State<OpenDetails> {
                   ),
                 ),
               ),
-              ContainerStyle(
-                child: Container(
-                  height: 200,
-                  child: PhotoView(
-                    imageProvider: NetworkImage(
-                      widget.image,
-                      scale: 1,
+              InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => Dialog(
+                      insetPadding: const EdgeInsets.all(10),
+                      child: Container(
+                        width: double.infinity,
+                        height: 400,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
+                        child: InteractiveViewer(
+                          maxScale: 10,
+                          child: Image.network(
+                            widget.image,
+                          ),
+                        ),
+                      ),
                     ),
-                    minScale: PhotoViewComputedScale.contained * 0.8,
-                    maxScale: PhotoViewComputedScale.covered * 2,
+                  );
+                },
+                child: ContainerStyle(
+                  child: SizedBox(
+                    height: 200,
+                    child: Image.network(
+                      widget.image,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),

@@ -1,9 +1,7 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import '../../../widget/animation/animatedWidget.dart';
-import '../../../widget/animation/fadeAnimationModel.dart';
-import '../../../widget/animation/fadeController.dart';
 import 'loginForm.dart';
 import 'loginText.dart';
 

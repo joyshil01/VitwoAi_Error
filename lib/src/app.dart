@@ -12,8 +12,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       restorationScopeId: 'app',
       routerConfig: goRouter,
-      // getPages: RoutesClass.routes,
-      // initialRoute: RoutesClass.home,
       builder: EasyLoading.init(),
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white, //background color

@@ -1,8 +1,7 @@
 // ignore_for_file: file_names, use_build_context_synchronously
 
 import 'dart:convert';
-// import 'package:error/src/features/open/presentation/openScreen.dart';
-import 'package:error/src/features/open/presentation/openScreen.dart';
+import 'package:error/src/widget/navBottom.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -107,7 +106,7 @@ class _UserWidgetState extends State<UserWidget> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const OpenScreen(),
+            builder: (context) => const MainPage(),
           ),
         );
       }
@@ -164,9 +163,21 @@ class _UserWidgetState extends State<UserWidget> {
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: DropdownButton<dynamic>(
+                child: DropdownButtonFormField<dynamic>(
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    suffixIcon: Icon(
+                      Icons.arrow_drop_down,
+                      color: Colors.black,
+                    ),
+                  ),
                   value: selectedAdministrator,
-                  underline: Container(),
+                  hint: Text(
+                    'Select User',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  // underline: Container(),
+                  icon: Container(),
                   onChanged: (newValue) {
                     setState(() {
                       selectedAdministrator = newValue;

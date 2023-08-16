@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
@@ -10,7 +9,7 @@ import '../../../../constans.dart';
 import '../../../utils/api_urls.dart';
 import '../../../utils/media-query.dart';
 import '../../../widget/containerStyle.dart';
-import 'Complete_Screen.dart';
+import '../../../widget/navBottom.dart';
 
 class CompleteDetails extends StatefulWidget {
   String postigDate;
@@ -111,7 +110,7 @@ class _CompleteDetailsState extends State<CompleteDetails> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const Complete_Screen(),
+            builder: (context) => const MainPage(),
           ),
         );
       } else {
@@ -367,16 +366,32 @@ class _CompleteDetailsState extends State<CompleteDetails> {
                   ),
                 ),
               ),
-              ContainerStyle(
-                child: Container(
-                  height: 200,
-                  child: PhotoView(
-                    imageProvider: NetworkImage(
-                      widget.image,
-                      scale: 1,
+              InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => Dialog(
+                      insetPadding: const EdgeInsets.all(10),
+                      child: Container(
+                        width: double.infinity,
+                        height: 400,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
+                        child: InteractiveViewer(
+                          maxScale: 10,
+                          child: Image.network(
+                            widget.image,
+                          ),
+                        ),
+                      ),
                     ),
-                    minScale: PhotoViewComputedScale.contained * 0.8,
-                    maxScale: PhotoViewComputedScale.covered * 2,
+                  );
+                },
+                child: ContainerStyle(
+                  child: Image.network(
+                    widget.image,
                   ),
                 ),
               ),

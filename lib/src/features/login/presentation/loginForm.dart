@@ -1,13 +1,9 @@
 // ignore_for_file: file_names
 
-import 'package:error/src/widget/navBottom.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:get/get.dart';
-// import '../../../routing/app_router.dart';
 import '../../../routing/app_router.dart';
 import 'loginController.dart';
 

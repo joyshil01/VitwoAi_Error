@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -37,84 +39,85 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
+  int _selectedTab = 0;
+
+  List _pages = [
+    const OpenScreen(),
+    const Home_Page(),
+    const TodoScreen(),
+    const Complete_Screen(),
+  ];
+  List _pages1 = [
+    const Home_Page(),
+    const TodoScreen(),
+    const Complete_Screen(),
+  ];
+
+  _changeTab(int index) {
+    setState(() {
+      _selectedTab = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PersistentTabView(
-        context,
-        controller: _controller,
-        screens: role == true
+      body: role == true ? _pages[_selectedTab] : _pages1[_selectedTab],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedTab,
+        onTap: (index) => _changeTab(index),
+        selectedItemColor: role == true
+            ? _selectedTab == 0
+                ? Colors.red
+                : _selectedTab == 1
+                    ? mainColor
+                    : _selectedTab == 2
+                        ? Colors.amber
+                        : _selectedTab == 3
+                            ? Colors.green
+                            : Colors.white
+            : _selectedTab == 0
+                ? mainColor
+                : _selectedTab == 1
+                    ? Colors.amber
+                    : _selectedTab == 2
+                        ? Colors.green
+                        : Colors.white,
+        unselectedItemColor: Colors.grey,
+        items: role == true
             ? const [
-                OpenScreen(),
-                Home_Page(),
-                TodoScreen(),
-                Complete_Screen(),
+                BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.equal_circle),
+                  label: "Open",
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.asterisk_circle),
+                  label: "Assigned",
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.doc),
+                  label: "Todo",
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.checkmark_alt_circle),
+                  label: "Done",
+                ),
               ]
             : const [
-                Home_Page(),
-                TodoScreen(),
-                Complete_Screen(),
+                BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.asterisk_circle),
+                  label: "Assigned",
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.doc),
+                  label: "Todo",
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.checkmark_alt_circle),
+                  label: "Done",
+                ),
               ],
-        items: _navBarsItems(),
-        navBarStyle: NavBarStyle.style1,
       ),
     );
-  }
-
-  List<PersistentBottomNavBarItem> _navBarsItems() {
-    return role == true
-        ? [
-            PersistentBottomNavBarItem(
-              icon: const Icon(CupertinoIcons.equal_circle),
-              title: ("Open"),
-              textStyle: Theme.of(context).textTheme.bodyMedium,
-              activeColorPrimary: Colors.red,
-              inactiveColorPrimary: CupertinoColors.systemGrey,
-            ),
-            PersistentBottomNavBarItem(
-              icon: const Icon(CupertinoIcons.asterisk_circle),
-              title: ("Assigned"),
-              textStyle: Theme.of(context).textTheme.bodyMedium,
-              activeColorPrimary: mainColor,
-              inactiveColorPrimary: CupertinoColors.systemGrey,
-            ),
-            PersistentBottomNavBarItem(
-              icon: const Icon(CupertinoIcons.doc),
-              title: ("Todo"),
-              textStyle: Theme.of(context).textTheme.bodyMedium,
-              activeColorPrimary: Colors.amber,
-              inactiveColorPrimary: CupertinoColors.systemGrey,
-            ),
-            PersistentBottomNavBarItem(
-              icon: const Icon(CupertinoIcons.checkmark_alt_circle),
-              title: ("Done"),
-              textStyle: Theme.of(context).textTheme.bodyMedium,
-              activeColorPrimary: Colors.green,
-              inactiveColorPrimary: CupertinoColors.systemGrey,
-            ),
-          ]
-        : [
-            PersistentBottomNavBarItem(
-              icon: const Icon(CupertinoIcons.asterisk_circle),
-              title: ("Assigned"),
-              textStyle: Theme.of(context).textTheme.bodyMedium,
-              activeColorPrimary: mainColor,
-              inactiveColorPrimary: CupertinoColors.systemGrey,
-            ),
-            PersistentBottomNavBarItem(
-              icon: const Icon(CupertinoIcons.doc),
-              title: ("Todo"),
-              textStyle: Theme.of(context).textTheme.bodyMedium,
-              activeColorPrimary: Colors.amber,
-              inactiveColorPrimary: CupertinoColors.systemGrey,
-            ),
-            PersistentBottomNavBarItem(
-              icon: const Icon(CupertinoIcons.checkmark_alt_circle),
-              title: ("Done"),
-              textStyle: Theme.of(context).textTheme.bodyMedium,
-              activeColorPrimary: Colors.green,
-              inactiveColorPrimary: CupertinoColors.systemGrey,
-            ),
-          ];
   }
 }
