@@ -31,6 +31,8 @@ dependencies:
   go_router: ^6.2.0
   # photo_view:
   url_launcher:
+  flutter_local_notifications: ^9.2.0
+  rflutter_alert:
 
 flutter_icons:
   image_path: "assets/logo/errorLogo.png"

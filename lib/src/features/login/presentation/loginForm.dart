@@ -4,6 +4,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import '../../../notifications/local_Notifications.dart';
 import '../../../routing/app_router.dart';
 import 'loginController.dart';
 
@@ -20,11 +22,92 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   String? fcm;
   Future<void> fcmCodeGenerate() async {
     fcm = await FirebaseMessaging.instance.getToken();
-    print('FCM CODE: $fcm');
+    print('FCM CODE notification: $fcm');
   }
+
+  init() async {
+    String deviceToken = await getDeviceToken();
+    print("###### PRINT DEVICE TOKEN TO USE FOR PUSH NOTIFCIATION ######");
+    print(deviceToken);
+    print("############################################################");
+
+    // listen for user to click on notification
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage remoteMessage) {
+      String? title = remoteMessage.notification!.title;
+      String? description = remoteMessage.notification!.body;
+
+      //im gonna have an alertdialog when clicking from push notification
+      Alert(
+        context: context,
+        type: AlertType.error,
+        title: title, // title from push notification data
+        desc: description, // description from push notifcation data
+        buttons: [
+          DialogButton(
+            child: Text(
+              "COOL",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () => Navigator.pop(context),
+            width: 120,
+          )
+        ],
+      ).show();
+    });
+  }
+
+  // @override
+  // void initState() {
+  //   fcmCodeGenerate();
+  //   super.initState();
+  // }
 
   @override
   void initState() {
+    init();
+
+    FirebaseMessaging.instance.getInitialMessage().then(
+      (message) {
+        print("FirebaseMessaging.instance.getInitialMessage");
+        if (message != null) {
+          print("New Notification");
+
+          if (message.data['_id'] != null) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => LoginForm(),
+              ),
+            );
+          }
+        }
+      },
+    );
+
+    // 2. This method only call when App in forground it mean app must be opened
+    FirebaseMessaging.onMessage.listen(
+      (message) {
+        print("FirebaseMessaging.onMessage.listen");
+        if (message.notification != null) {
+          print(message.notification!.title);
+          print(message.notification!.body);
+          print("message.data11 ${message.data}");
+          LocalNotificationService.createanddisplaynotification(message);
+        }
+      },
+    );
+
+    // 3. This method only call when App in background and not terminated(not closed)
+    FirebaseMessaging.onMessageOpenedApp.listen(
+      (message) {
+        print("FirebaseMessaging.onMessageOpenedApp.listen");
+        if (message.notification != null) {
+          print(message.notification!.title);
+          print(message.notification!.body);
+          print("message.data22 ${message.data['_id']}");
+        }
+      },
+    );
+
     fcmCodeGenerate();
     super.initState();
   }
@@ -165,7 +248,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                     );
                 if (success) {
                   context.pushReplacementNamed(AppRoute.home.name);
-                  
                 }
               }
             },
@@ -176,5 +258,13 @@ class _LoginFormState extends ConsumerState<LoginForm> {
         ),
       ],
     );
+  }
+
+  Future getDeviceToken() async {
+    //request user permission for push notification
+    FirebaseMessaging.instance.requestPermission();
+    FirebaseMessaging _firebaseMessage = FirebaseMessaging.instance;
+    String? deviceToken = await _firebaseMessage.getToken();
+    return (deviceToken == null) ? "" : deviceToken;
   }
 }
