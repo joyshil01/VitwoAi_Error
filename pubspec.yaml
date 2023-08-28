@@ -13,8 +13,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  persistent_bottom_nav_bar:
-  animated_splash_screen:
+  # persistent_bottom_nav_bar:
+  # animated_splash_screen:
   flutter_launcher_icons:
   intl:
   # get:

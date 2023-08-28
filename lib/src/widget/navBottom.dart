@@ -2,7 +2,6 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import '../../constans.dart';
 import '../features/complete/presentation/Complete_Screen.dart';
 import '../features/home/presentation/home_Page.dart';
@@ -18,8 +17,6 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final PersistentTabController _controller =
-      PersistentTabController(initialIndex: 1);
   bool role = false;
 
   @override
