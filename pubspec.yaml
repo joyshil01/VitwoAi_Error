@@ -33,6 +33,8 @@ dependencies:
   url_launcher:
   flutter_local_notifications: ^9.2.0
   rflutter_alert:
+  fl_chart:
+  syncfusion_flutter_charts:
 
 flutter_icons:
   image_path: "assets/logo/errorLogo.png"

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../constans.dart';
 import '../features/complete/presentation/Complete_Screen.dart';
+import '../features/dashBoard/presentation/dashboardScreen.dart';
 import '../features/home/presentation/home_Page.dart';
 import '../features/open/presentation/openScreen.dart';
 import '../features/todo/presentation/todoScreen.dart';
@@ -39,12 +40,16 @@ class _MainPageState extends State<MainPage> {
   int _selectedTab = 0;
 
   List _pages = [
+    const DashBoardScreen(),
+    // PieChartScreen(),
     const OpenScreen(),
     const Home_Page(),
     const TodoScreen(),
     const Complete_Screen(),
   ];
   List _pages1 = [
+    const DashBoardScreen(),
+    // PieChartScreen(),
     const Home_Page(),
     const TodoScreen(),
     const Complete_Screen(),
@@ -65,24 +70,32 @@ class _MainPageState extends State<MainPage> {
         onTap: (index) => _changeTab(index),
         selectedItemColor: role == true
             ? _selectedTab == 0
-                ? Colors.red
+                ? Colors.black
+                : _selectedTab == 1
+                    ? Colors.red
+                    : _selectedTab == 2
+                        ? mainColor
+                        : _selectedTab == 3
+                            ? Colors.amber
+                            : _selectedTab == 4
+                                ? Colors.green
+                                : Colors.white
+            : _selectedTab == 0
+                ? Colors.black
                 : _selectedTab == 1
                     ? mainColor
                     : _selectedTab == 2
                         ? Colors.amber
                         : _selectedTab == 3
                             ? Colors.green
-                            : Colors.white
-            : _selectedTab == 0
-                ? mainColor
-                : _selectedTab == 1
-                    ? Colors.amber
-                    : _selectedTab == 2
-                        ? Colors.green
-                        : Colors.white,
+                            : Colors.white,
         unselectedItemColor: Colors.grey,
         items: role == true
             ? const [
+                BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.home),
+                  label: "Home",
+                ),
                 BottomNavigationBarItem(
                   icon: Icon(CupertinoIcons.equal_circle),
                   label: "Open",
@@ -101,6 +114,10 @@ class _MainPageState extends State<MainPage> {
                 ),
               ]
             : const [
+                BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.home),
+                  label: "Home",
+                ),
                 BottomNavigationBarItem(
                   icon: Icon(CupertinoIcons.asterisk_circle),
                   label: "Assigned",

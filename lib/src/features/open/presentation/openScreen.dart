@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, use_build_context_synchronously
+// ignore_for_file: file_names, use_build_context_synchronously, unused_local_variable, body_might_complete_normally_nullable
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
