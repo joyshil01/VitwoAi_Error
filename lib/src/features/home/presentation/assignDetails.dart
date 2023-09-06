@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, must_be_immutable, use_key_in_widget_constructors, use_build_context_synchronously
+// ignore_for_file: file_names, must_be_immutable, use_key_in_widget_constructors, use_build_context_synchronously, unused_field
 
 import 'dart:convert';
 import 'package:flutter/material.dart';

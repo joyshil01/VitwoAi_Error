@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types, use_build_context_synchronously, file_names, unused_local_variable
+// ignore_for_file: camel_case_types, use_build_context_synchronously, file_names, unused_local_variable, unused_field, body_might_complete_normally_nullable
 
 import 'dart:convert';
 import 'package:error/constans.dart';

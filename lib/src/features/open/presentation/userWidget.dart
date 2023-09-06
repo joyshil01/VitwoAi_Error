@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, use_build_context_synchronously
+// ignore_for_file: file_names, use_build_context_synchronously, must_be_immutable, unnecessary_null_comparison
 
 import 'dart:convert';
 import 'package:error/src/widget/navBottom.dart';

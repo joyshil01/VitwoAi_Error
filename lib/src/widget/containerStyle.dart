@@ -1,6 +1,4 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import '../../constans.dart';
 
 class ContainerStyle extends StatelessWidget {
   final Widget child;
@@ -14,8 +12,6 @@ class ContainerStyle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
     return Card(
       color: Colors.white,
       elevation: 5,
@@ -38,8 +34,6 @@ class ContainerCopyStyle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
     return Card(
       color: Colors.white,
       elevation: 5,

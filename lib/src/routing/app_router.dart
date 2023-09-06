@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable, body_might_complete_normally_nullable
+
 import 'package:error/src/features/login/presentation/loginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
