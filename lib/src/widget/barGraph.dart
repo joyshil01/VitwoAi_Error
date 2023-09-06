@@ -1,5 +1,10 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import '../features/dashBoard/domain/barGraphModel.dart';
+import '../utils/api_urls.dart';
+import 'package:http/http.dart' as http;
 
 class BarGraph extends StatefulWidget {
   const BarGraph({super.key});
@@ -9,99 +14,110 @@ class BarGraph extends StatefulWidget {
 }
 
 class _BarGraphState extends State<BarGraph> {
-  List<_ChartData>? chartData;
-
   TooltipBehavior? _tooltipBehavior;
+  var _isLoading = true;
+  var comments = [];
+  List<ChartData> barGraphData = [];
 
   @override
   void initState() {
     _tooltipBehavior = TooltipBehavior(enable: true, canShowMarker: true);
-    chartData = <_ChartData>[
-      _ChartData(
-        'Joy',
-        30,
-        70,
-      ),
-      _ChartData(
-        'Ramen',
-        20,
-        80,
-      ),
-      _ChartData(
-        'tfg',
-        2,
-        98,
-      ),
-      _ChartData(
-        'Srijan',
-        10,
-        90,
-      ),
-      _ChartData(
-        'ABC',
-        15,
-        85,
-      ),
-      _ChartData(
-        'Test',
-        25,
-        75,
-      ),
-      _ChartData(
-        'EFG',
-        5,
-        95,
-      ),
-      _ChartData(
-        'test 1',
-        10,
-        90,
-      ),
-    ];
+    _fetchBarGraphDetails();
     super.initState();
   }
 
-  Widget build(BuildContext context) {
-    return SfCartesianChart(
-      plotAreaBorderWidth: 0,
-      title: ChartTitle(
-        text: 'Team Task',
-        textStyle: Theme.of(context).textTheme.titleLarge,
-        alignment: ChartAlignment.near,
-      ),
-      legend:
-          Legend(isVisible: true, overflowMode: LegendItemOverflowMode.wrap),
-      primaryXAxis: CategoryAxis(
-        majorGridLines: const MajorGridLines(width: 0),
-      ),
-      primaryYAxis: NumericAxis(
-          rangePadding: ChartRangePadding.none,
-          axisLine: const AxisLine(width: 0),
-          majorTickLines: const MajorTickLines(size: 0)),
-      series: _getStackedColumnSeries(),
-      tooltipBehavior: _tooltipBehavior,
-    );
+  Future<void> _fetchBarGraphDetails() async {
+    var uri = Uri.parse(barGraph);
+
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String? tokenUser = sharedPreferences.getString('token');
+
+    var headersUser = {
+      'Authorization': 'Bearer $tokenUser',
+    };
+
+    var response = await http.get(uri, headers: headersUser);
+
+    if (response.statusCode == 200) {
+      var responseDecoded = json.decode(response.body);
+      print({'responseeeeeeeeeeeee': responseDecoded});
+
+      setState(() {
+        comments = comments + responseDecoded['data'];
+        _isLoading = false;
+      });
+
+      barGraphData = comments
+          .map<ChartData>(
+            (item) => ChartData(
+              name: item['fldAdminName'],
+              todoP: num.parse(item['todo_assign_percentage']),
+              doneP: num.parse(item['solved_percentage']),
+              todoCount: item['total_todo_assign'],
+              doneCount: item['total_solved'],
+            ),
+          )
+          .toList();
+    } else {
+      setState(() {
+        _isLoading = false;
+        comments = [];
+        barGraphData = [];
+      });
+      print('failure');
+      throw Exception('Could not fetch Pie data');
+    }
   }
 
-  List<ChartSeries<_ChartData, String>> _getStackedColumnSeries() {
-    return <ChartSeries<_ChartData, String>>[
-      
-      StackedColumn100Series<_ChartData, String>(
-        dataSource: chartData!,
+  Widget build(BuildContext context) {
+    return _isLoading
+        ? const Center(
+            child: CircularProgressIndicator(
+              backgroundColor: Colors.black,
+            ),
+          )
+        : SfCartesianChart(
+            plotAreaBorderWidth: 0,
+            title: ChartTitle(
+              text: 'Team Task',
+              textStyle: Theme.of(context).textTheme.titleLarge,
+              alignment: ChartAlignment.near,
+            ),
+            legend: Legend(
+                isVisible: true, overflowMode: LegendItemOverflowMode.wrap),
+            primaryXAxis: CategoryAxis(
+              majorGridLines: const MajorGridLines(width: 0),
+              labelRotation: 60,
+            ),
+            primaryYAxis: NumericAxis(
+                rangePadding: ChartRangePadding.none,
+                axisLine: const AxisLine(width: 0),
+                majorTickLines: const MajorTickLines(size: 0)),
+            series: _getStackedColumnSeries(),
+            tooltipBehavior: _tooltipBehavior,
+          );
+  }
+
+  List<ChartSeries<ChartData, String>> _getStackedColumnSeries() {
+    return <ChartSeries<ChartData, String>>[
+      StackedColumn100Series<ChartData, String>(
+        dataSource: barGraphData,
         dataLabelSettings: const DataLabelSettings(
-          isVisible: false,
+          isVisible: true,
         ),
-        xValueMapper: (_ChartData sales, _) => sales.x,
+        xValueMapper: (ChartData sales, _) => sales.name.split(' ')[0],
+        dataLabelMapper: (ChartData sales, _) => sales.todoCount,
         color: Colors.amberAccent,
-        yValueMapper: (_ChartData sales, _) => sales.y1,
+        yValueMapper: (ChartData sales, _) => sales.todoP,
         name: 'Remaning',
       ),
-      StackedColumn100Series<_ChartData, String>(
-        dataSource: chartData!,
-        dataLabelSettings: const DataLabelSettings(isVisible: false),
-        xValueMapper: (_ChartData sales, _) => sales.x,
+      StackedColumn100Series<ChartData, String>(
+        dataSource: barGraphData,
+        dataLabelSettings: const DataLabelSettings(isVisible: true),
+        xValueMapper: (ChartData sales, _) => sales.name.split(' ')[0],
+        dataLabelMapper: (ChartData sales, _) => sales.doneCount,
         color: Colors.greenAccent,
-        yValueMapper: (_ChartData sales, _) => sales.y2,
+        yValueMapper: (ChartData sales, _) => sales.doneP,
         name: 'Done',
       ),
     ];
@@ -109,18 +125,6 @@ class _BarGraphState extends State<BarGraph> {
 
   @override
   void dispose() {
-    chartData!.clear();
     super.dispose();
   }
-}
-
-class _ChartData {
-  _ChartData(
-    this.x,
-    this.y1,
-    this.y2,
-  );
-  final String x;
-  final num y1;
-  final num y2;
 }
