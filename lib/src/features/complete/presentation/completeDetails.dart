@@ -1,7 +1,8 @@
-// ignore_for_file: file_names, must_be_immutable, use_build_context_synchronously
+// ignore_for_file: file_names, must_be_immutable, use_build_context_synchronously, deprecated_member_use, unnecessary_null_comparison
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
@@ -42,14 +43,6 @@ class CompleteDetails extends StatefulWidget {
 const List<String> list = <String>['Solved', 'Todo', 'Assigned'];
 
 class _CompleteDetailsState extends State<CompleteDetails> {
-  void _openURL() async {
-    if (await canLaunch(widget.pageUrl)) {
-      await launch(widget.pageUrl, forceSafariVC: false, forceWebView: false);
-    } else {
-      throw 'Could not launch $widget.pageUrl';
-    }
-  }
-
   String dropdownValue = list.first;
   bool role = false;
 
@@ -353,7 +346,21 @@ class _CompleteDetailsState extends State<CompleteDetails> {
                           ),
                           Expanded(
                             child: TextButton(
-                              onPressed: _openURL,
+                              onPressed: () async {
+                                if (widget.pageUrl != null) {
+                                  await launch(widget.pageUrl);
+                                }
+                              },
+                              onLongPress: () {
+                                Clipboard.setData(
+                                    ClipboardData(text: widget.pageUrl));
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    duration: Duration(milliseconds: 300),
+                                    content: Text('Link Copied'),
+                                  ),
+                                );
+                              },
                               child: Text(
                                 widget.pageUrl,
                                 overflow: TextOverflow.fade,
@@ -395,15 +402,54 @@ class _CompleteDetailsState extends State<CompleteDetails> {
                   ),
                 ),
               ),
-              ContainerStyle(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: Text(
-                    widget.description,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontSize: 16,
+              SizedBox(
+                width: double.infinity,
+                child: ContainerStyle(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Task Description:',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Clipboard.setData(
+                                  ClipboardData(text: widget.description),
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    duration: Duration(milliseconds: 300),
+                                    content: Text('Copied description'),
+                                  ),
+                                );
+                              },
+                              child: Icon(Icons.copy),
+                            ),
+                          ],
                         ),
+                        const SizedBox(height: 5),
+                        Text(
+                          widget.description,
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    fontSize: 14,
+                                  ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

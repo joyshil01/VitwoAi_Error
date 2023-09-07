@@ -1,8 +1,10 @@
-// ignore_for_file: file_names, must_be_immutable, use_key_in_widget_constructors, use_build_context_synchronously
+// ignore_for_file: file_names, must_be_immutable, use_key_in_widget_constructors, use_build_context_synchronously, deprecated_member_use, unnecessary_null_comparison
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../constans.dart';
 import '../../../utils/api_urls.dart';
 import '../../../utils/media-query.dart';
@@ -348,7 +350,21 @@ class _TodoDetailsState extends State<TodoDetails> {
                           ),
                           Expanded(
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                if (widget.pageUrl != null) {
+                                  await launch(widget.pageUrl);
+                                }
+                              },
+                              onLongPress: () {
+                                Clipboard.setData(
+                                    ClipboardData(text: widget.pageUrl));
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    duration: Duration(milliseconds: 300),
+                                    content: Text('Link Copied'),
+                                  ),
+                                );
+                              },
                               child: Text(
                                 widget.pageUrl,
                                 overflow: TextOverflow.fade,
@@ -390,15 +406,54 @@ class _TodoDetailsState extends State<TodoDetails> {
                   ),
                 ),
               ),
-              ContainerStyle(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: Text(
-                    widget.description,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontSize: 16,
+              SizedBox(
+                width: double.infinity,
+                child: ContainerStyle(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Task Description:',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Clipboard.setData(
+                                  ClipboardData(text: widget.description),
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    duration: Duration(milliseconds: 300),
+                                    content: Text('Copied description'),
+                                  ),
+                                );
+                              },
+                              child: Icon(Icons.copy),
+                            ),
+                          ],
                         ),
+                        const SizedBox(height: 5),
+                        Text(
+                          widget.description,
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    fontSize: 14,
+                                  ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
