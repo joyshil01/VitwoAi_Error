@@ -72,7 +72,7 @@ class _MainPageState extends State<MainPage> {
             ? _selectedTab == 0
                 ? Colors.black
                 : _selectedTab == 1
-                    ? Colors.red
+                    ? Colors.redAccent.shade100
                     : _selectedTab == 2
                         ? mainColor
                         : _selectedTab == 3
@@ -98,7 +98,7 @@ class _MainPageState extends State<MainPage> {
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(CupertinoIcons.equal_circle),
-                  label: "Open",
+                  label: "Unassigned List",
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(CupertinoIcons.asterisk_circle),
@@ -106,11 +106,11 @@ class _MainPageState extends State<MainPage> {
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(CupertinoIcons.doc),
-                  label: "Todo",
+                  label: "My Todo",
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(CupertinoIcons.checkmark_alt_circle),
-                  label: "Done",
+                  label: "My Done",
                 ),
               ]
             : const [

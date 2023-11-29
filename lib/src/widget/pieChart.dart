@@ -102,7 +102,7 @@ class _PieChartSample2State extends ConsumerState<PieChartSample2> {
                   centerSpaceRadius: 50,
                   sections: [
                     PieChartSectionData(
-                      color: Colors.red,
+                      color: Colors.redAccent.shade100,
                       showTitle: true,
                       title: data['data']['value']['open'].toString(),
                       titleStyle: Theme.of(context)

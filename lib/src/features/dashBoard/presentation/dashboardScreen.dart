@@ -140,8 +140,8 @@ class _DashBoardScreenState extends ConsumerState<DashBoardScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Indicator(
-                      color: Colors.red,
-                      text: 'Open',
+                      color: Colors.redAccent.shade100,
+                      text: 'Issue Log',
                       isSquare: true,
                     ),
                     Indicator(
