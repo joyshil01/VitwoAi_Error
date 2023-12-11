@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 import 'package:error/constans.dart';
-import 'package:error/src/features/home/domain/assignModel.dart';
+import 'package:error/src/features/Assigned/domain/assignModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -16,14 +16,14 @@ import 'package:http/http.dart' as http;
 import 'assignDetails.dart';
 import 'logoutController.dart';
 
-class Home_Page extends ConsumerStatefulWidget {
-  const Home_Page({super.key});
+class AssignScreen extends ConsumerStatefulWidget {
+  const AssignScreen({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _Home_PageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _AssignScreenState();
 }
 
-class _Home_PageState extends ConsumerState<Home_Page> {
+class _AssignScreenState extends ConsumerState<AssignScreen> {
   final scrollController = ScrollController();
   var _isLoadingMore = false;
   var _page = 0;

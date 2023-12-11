@@ -11,7 +11,7 @@ import '../../../routing/app_router.dart';
 import '../../../utils/api_urls.dart';
 import '../../../utils/media-query.dart';
 import '../../../widget/containerStyle.dart';
-import '../../home/presentation/logoutController.dart';
+import '../../Assigned/presentation/logoutController.dart';
 import '../domain/completeModel.dart';
 import 'package:http/http.dart' as http;
 import 'completeDetails.dart';

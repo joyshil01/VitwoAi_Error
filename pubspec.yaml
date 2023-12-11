@@ -2,12 +2,12 @@ name: error
 description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # of the product and file versions while build-number is used as the build suffix.
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.19.2 <3.0.0'
+  sdk: ">=2.19.2 <3.0.0"
 
 # versions available, run `flutter pub outdated`.
 dependencies:
@@ -35,6 +35,7 @@ dependencies:
   rflutter_alert:
   fl_chart:
   syncfusion_flutter_charts:
+  flutter_svg:
 
 flutter_icons:
   image_path: "assets/logo/errorLogo.png"
@@ -48,10 +49,8 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
-
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -62,7 +61,7 @@ flutter:
     - assets/
     - assets/img/
     - assets/json/
- 
+    - assets/svgImages/
 
   fonts:
     - family: Roboto

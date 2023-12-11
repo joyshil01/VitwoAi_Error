@@ -12,18 +12,18 @@ import '../../../utils/api_urls.dart';
 import '../../../utils/media-query.dart';
 import '../../../widget/containerStyle.dart';
 import 'package:http/http.dart' as http;
-import '../../home/presentation/logoutController.dart';
+import '../../Assigned/presentation/logoutController.dart';
 import '../domain/openModel.dart';
-import 'openDetails.dart';
+import 'unassignDetails.dart';
 
-class OpenScreen extends ConsumerStatefulWidget {
-  const OpenScreen({super.key});
+class UnassignScreen extends ConsumerStatefulWidget {
+  const UnassignScreen({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _OpenScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _UnassignScreenState();
 }
 
-class _OpenScreenState extends ConsumerState<OpenScreen> {
+class _UnassignScreenState extends ConsumerState<UnassignScreen> {
   final scrollController = ScrollController();
   var _isLoadingMore = false;
   var _page = 0;

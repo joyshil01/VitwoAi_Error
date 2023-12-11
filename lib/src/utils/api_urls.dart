@@ -1,6 +1,6 @@
-// const baseURL = 'http://devalpha.vitwo.ai/api/v2/bugs'; ///// Test /////
+const baseURL = 'http://devalpha.vitwo.ai/api/v2/bugs'; ///// Test /////
 
-const baseURL = 'https://one.vitwo.ai/api/v2/bugs'; ///// Live /////
+// const baseURL = 'https://one.vitwo.ai/api/v2/bugs'; ///// Live /////
 
 const loginUrl = '$baseURL/login.php';
 const logOutUrl = '$baseURL/logout.php';

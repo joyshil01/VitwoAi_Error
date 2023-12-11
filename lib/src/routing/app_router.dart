@@ -4,7 +4,8 @@ import 'package:error/src/features/login/presentation/loginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../widget/navBottom.dart';
+// import '../widget/navBottom.dart';
+import '../widget/newNavBottom.dart';
 
 enum AppRoute {
   login,
@@ -36,7 +37,7 @@ final goRouter = GoRouter(
       path: '/bottom-nav',
       name: AppRoute.home.name,
       pageBuilder: (context, state) => MaterialPage(
-        child: const MainPage(),
+        child: const NavBottom(),
         fullscreenDialog: true,
         key: state.pageKey,
       ),

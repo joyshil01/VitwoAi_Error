@@ -8,7 +8,7 @@ import '../../../utils/media-query.dart';
 import '../../../widget/barGraph.dart';
 import '../../../widget/indicator.dart';
 import '../../../widget/pieChart.dart';
-import '../../home/presentation/logoutController.dart';
+import '../../Assigned/presentation/logoutController.dart';
 
 class DashBoardScreen extends ConsumerStatefulWidget {
   const DashBoardScreen({super.key});

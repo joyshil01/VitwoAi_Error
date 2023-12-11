@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import '../../constans.dart';
 import '../features/complete/presentation/Complete_Screen.dart';
 import '../features/dashBoard/presentation/dashboardScreen.dart';
-import '../features/home/presentation/home_Page.dart';
-import '../features/open/presentation/openScreen.dart';
+import '../features/Assigned/presentation/assign_Page.dart';
+import '../features/unAssignded/presentation/unassignScreen.dart';
 import '../features/todo/presentation/todoScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,15 +42,15 @@ class _MainPageState extends State<MainPage> {
   List _pages = [
     const DashBoardScreen(),
     // PieChartScreen(),
-    const OpenScreen(),
-    const Home_Page(),
+    const UnassignScreen(),
+    const AssignScreen(),
     const TodoScreen(),
     const Complete_Screen(),
   ];
   List _pages1 = [
     const DashBoardScreen(),
     // PieChartScreen(),
-    const Home_Page(),
+    const AssignScreen(),
     const TodoScreen(),
     const Complete_Screen(),
   ];
