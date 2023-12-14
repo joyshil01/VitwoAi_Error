@@ -1,3 +1,5 @@
+import 'package:error/constans.dart';
+import 'package:error/src/features/team/presentation/teamDetails.dart';
 import 'package:error/src/widget/containerStyle.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +11,12 @@ class TeamScreen extends StatefulWidget {
 }
 
 class _TeamScreenState extends State<TeamScreen> {
+  final addName = TextEditingController();
+  final designation = TextEditingController();
+  List<String> team = ['Select role', 'Admin', 'Testar', 'Developer'];
+  List<String> status = ['Select team', 'Product', 'A', 'B', 'C'];
+  String selectedTeam = 'Select role';
+  String selectedStatus = 'Select team';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +50,14 @@ class _TeamScreenState extends State<TeamScreen> {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TeamDetails(),
+                  ),
+                );
+              },
               child: ContainerStyle(
                 child: Container(
                   margin: const EdgeInsets.symmetric(
@@ -88,8 +103,159 @@ class _TeamScreenState extends State<TeamScreen> {
 
   Future<dynamic> _addTeam(BuildContext context) {
     return showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(25),
+          topRight: Radius.circular(25),
+        ),
+      ),
       context: context,
-      builder: (context) => Container(),
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+          child: SizedBox(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Name:',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                TextField(
+                  controller: addName,
+                  cursorColor: Colors.black,
+                  textInputAction: TextInputAction.next,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(fontSize: 16),
+                  decoration: InputDecoration(
+                    hintText: 'Name',
+                    hintStyle: Theme.of(context).textTheme.bodyMedium,
+                    enabledBorder: const UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.black,
+                        width: 1,
+                      ),
+                    ),
+                    focusedBorder: const UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.black,
+                        width: 1.8,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  'Designation:',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                TextField(
+                  controller: designation,
+                  cursorColor: Colors.black,
+                  textInputAction: TextInputAction.next,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(fontSize: 16),
+                  decoration: InputDecoration(
+                    hintText: 'Designation',
+                    hintStyle: Theme.of(context).textTheme.bodyMedium,
+                    enabledBorder: const UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.black,
+                        width: 1,
+                      ),
+                    ),
+                    focusedBorder: const UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.black,
+                        width: 1.8,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    DropdownButton<String>(
+                      value: selectedTeam,
+                      underline: Container(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedTeam = newValue!;
+                        });
+                      },
+                      items: team.map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(color: Colors.black),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    DropdownButton<String>(
+                      value: selectedStatus,
+                      underline: Container(),
+                      onChanged: (String? newStatus) {
+                        setState(() {
+                          selectedStatus = newStatus!;
+                        });
+                      },
+                      items: status
+                          .map<DropdownMenuItem<String>>((String statuss) {
+                        return DropdownMenuItem<String>(
+                          value: statuss,
+                          child: Text(
+                            statuss,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: Colors.black,
+                                ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: mainColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {},
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 10),
+                      child: Text(
+                        'Submit',
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
