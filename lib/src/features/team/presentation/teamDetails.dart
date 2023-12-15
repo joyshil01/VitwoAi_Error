@@ -1,9 +1,15 @@
 import 'package:error/constans.dart';
 import 'package:flutter/material.dart';
 
-class TeamDetails extends StatelessWidget {
+class TeamDetails extends StatefulWidget {
   const TeamDetails({super.key});
 
+  @override
+  State<TeamDetails> createState() => _TeamDetailsState();
+}
+
+class _TeamDetailsState extends State<TeamDetails> {
+  bool swichValue = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -146,6 +152,35 @@ class TeamDetails extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
+            Row(
+              children: [
+                Text("InActive",
+                    style: swichValue == false
+                        ? Theme.of(context).textTheme.bodyMedium
+                        : Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(color: Colors.grey)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(),
+                  child: Switch(
+                      activeColor: Colors.green,
+                      value: swichValue,
+                      onChanged: (value) {
+                        setState(() {
+                          swichValue = value;
+                        });
+                      }),
+                ),
+                Text("Active",
+                    style: swichValue == true
+                        ? Theme.of(context).textTheme.bodyMedium
+                        : Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(color: Colors.grey)),
+              ],
+            ),
             Text(
               'Address',
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
