@@ -1,4 +1,5 @@
 import 'package:error/constans.dart';
+import 'package:error/src/features/team/presentation/editTeamDetails.dart';
 import 'package:flutter/material.dart';
 
 class TeamDetails extends StatefulWidget {
@@ -120,7 +121,12 @@ class _TeamDetailsState extends State<TeamDetails> {
                       padding: const EdgeInsets.all(12.0),
                       child: TextButton(
                         onPressed: () {
-                          print('im pressed');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditTeamDetails(),
+                            ),
+                          );
                         },
                         child: Container(
                           padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
