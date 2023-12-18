@@ -68,9 +68,11 @@ class _EditTeamDetailsState extends State<EditTeamDetails> {
         child: ListView(
           children: [
             Container(
-              height: 300,
-              width: 300,
-              color: Colors.white,
+              margin: EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 244, 243, 243),
+                borderRadius: BorderRadius.circular(16.0),
+              ),
               child: Padding(
                 padding: const EdgeInsets.only(top: 40),
                 child: Column(
@@ -157,50 +159,56 @@ class _EditTeamDetailsState extends State<EditTeamDetails> {
               height: 20,
             ),
             Expanded(
-              child: Container(
-                width: double.infinity,
-                // color: Colors.green,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Spacilation",
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Colors.grey,
-                            )),
-                    Container(
-                      child: TextFormField(
-                        controller: _spacilationController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Container(
+                  width: double.infinity,
+                  // color: Colors.green,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Spacilation",
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    color: Colors.grey,
+                                  )),
+                      Container(
+                        child: TextFormField(
+                          controller: _spacilationController,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    Text("Contact",
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Colors.grey,
-                            )),
-                    Container(
-                      child: TextFormField(
-                        controller: _contactController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
+                      SizedBox(height: 10),
+                      Text("Contact",
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    color: Colors.grey,
+                                  )),
+                      Container(
+                        child: TextFormField(
+                          controller: _contactController,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                          ),
                         ),
                       ),
-                    ),
-                    Text("Email",
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Colors.grey,
-                            )),
-                    Container(
-                      child: TextFormField(
-                        controller: _emailController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
+                      Text("Email",
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    color: Colors.grey,
+                                  )),
+                      Container(
+                        child: TextFormField(
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             )
