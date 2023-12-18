@@ -9,14 +9,6 @@ class EditTeamDetails extends StatefulWidget {
 }
 
 class _EditTeamDetailsState extends State<EditTeamDetails> {
-  // var _productName;
-
-  // void _ubdateText(value) {
-  //   setState(() {
-  //     _productName = value;
-  //   });
-  // }
-
   TextEditingController _titleController = TextEditingController();
   TextEditingController _subtitleController = TextEditingController();
   TextEditingController _roleController = TextEditingController();
@@ -27,7 +19,7 @@ class _EditTeamDetailsState extends State<EditTeamDetails> {
 
   @override
   Widget build(BuildContext context) {
-    _titleController.text = "mamoon";
+    _titleController.text = "Mamoon";
     _subtitleController.text = "Flutter Devaloper";
     _roleController.text = "Devloper";
     _teamController.text = "Product";

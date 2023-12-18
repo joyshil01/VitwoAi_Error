@@ -37,11 +37,9 @@ class _UnAssignDetailsState extends State<UnAssignDetails> {
                     child: SizedBox(
                       height: 330,
                       child: ListView(
-                        // mainAxisSize: MainAxisSize.min,
-                        // crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(top: 10, left: 10),
+                            padding: const EdgeInsets.only(top: 10, left: 20),
                             child: Text(
                               "Assign To: ",
                               style: Theme.of(context)
@@ -54,26 +52,34 @@ class _UnAssignDetailsState extends State<UnAssignDetails> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 5),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Devaloper: "),
-                                DropdownButton(
-                                  value: devloperValue,
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      devloperValue = newValue!;
-                                    });
-                                  },
-                                  items: list.map<DropdownMenuItem<String>>(
-                                      (String newValue) {
-                                    return DropdownMenuItem(
-                                      value: newValue,
-                                      child: Text(
-                                        newValue,
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                    );
-                                  }).toList(),
+                                Text(
+                                  "Devaloper: ",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(fontSize: 16),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 20),
+                                  child: DropdownButton(
+                                    value: devloperValue,
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        devloperValue = newValue!;
+                                      });
+                                    },
+                                    items: list.map<DropdownMenuItem<String>>(
+                                        (String newValue) {
+                                      return DropdownMenuItem(
+                                        value: newValue,
+                                        child: Text(
+                                          newValue,
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
                                 )
                               ],
                             ),
@@ -81,27 +87,35 @@ class _UnAssignDetailsState extends State<UnAssignDetails> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Review: "),
-                                DropdownButton(
-                                  value: reviewValue,
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      reviewValue = newValue!;
-                                    });
-                                  },
-                                  items: reviewList
-                                      .map<DropdownMenuItem<String>>(
-                                          (String newValue) {
-                                    return DropdownMenuItem(
-                                      value: newValue,
-                                      child: Text(
-                                        newValue,
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                    );
-                                  }).toList(),
+                                Text(
+                                  "Review: ",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(fontSize: 16),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 20),
+                                  child: DropdownButton(
+                                    value: reviewValue,
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        reviewValue = newValue!;
+                                      });
+                                    },
+                                    items: reviewList
+                                        .map<DropdownMenuItem<String>>(
+                                            (String newValue) {
+                                      return DropdownMenuItem(
+                                        value: newValue,
+                                        child: Text(
+                                          newValue,
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
                                 )
                               ],
                             ),
@@ -113,13 +127,23 @@ class _UnAssignDetailsState extends State<UnAssignDetails> {
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: Row(
                               children: [
-                                Text("Task Duration(hr): "),
+                                Text(
+                                  "Task Duration(hr): ",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(fontSize: 16),
+                                ),
                                 Container(
-                                  width: 50,
+                                  width: 210,
                                   child: TextField(
+                                    cursorColor: Colors.black,
                                     controller: _timerController,
                                     keyboardType: TextInputType.number,
-                                    decoration: InputDecoration(),
+                                    decoration: InputDecoration(
+                                        focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black))),
                                   ),
                                 )
                               ],
@@ -236,7 +260,10 @@ class _UnAssignDetailsState extends State<UnAssignDetails> {
                         TextSpan(
                             text:
                                 "https://vitwo.finance/about vaghcvakdvcadvucvadkcvuavdgvadgvaudvcudavcavdcvdjgagdvsv djgajhadv gjadj vgjsjjs",
-                            style: Theme.of(context).textTheme.bodySmall)
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(color: Colors.blue))
                       ])),
                 ],
               ),
@@ -257,10 +284,10 @@ class _UnAssignDetailsState extends State<UnAssignDetails> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Task Description: ",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall!
-                              .copyWith(fontSize: 20, color: Colors.blue)),
+                          style:
+                              Theme.of(context).textTheme.bodySmall!.copyWith(
+                                    fontSize: 20,
+                                  )),
                       IconButton(onPressed: () {}, icon: Icon(Icons.copy))
                     ],
                   ),
