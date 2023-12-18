@@ -1,12 +1,199 @@
 import 'package:flutter/material.dart';
 
-class EditTeamDetails extends StatelessWidget {
+class EditTeamDetails extends StatefulWidget {
   const EditTeamDetails({super.key});
 
   @override
+  State<EditTeamDetails> createState() => _EditTeamDetailsState();
+}
+
+class _EditTeamDetailsState extends State<EditTeamDetails> {
+  // var _productName;
+
+  // void _ubdateText(value) {
+  //   setState(() {
+  //     _productName = value;
+  //   });
+  // }
+
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _subtitleController = TextEditingController();
+  TextEditingController _roleController = TextEditingController();
+  TextEditingController _teamController = TextEditingController();
+  TextEditingController _spacilationController = TextEditingController();
+  TextEditingController _contactController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
+    _titleController.text = "mamoon";
+    _subtitleController.text = "Flutter Devaloper";
+    _roleController.text = "Devloper";
+    _teamController.text = "Product";
+    _spacilationController.text = "Flutter Devloper";
+    _contactController.text = "6296224432";
+    _emailController.text = "mamoon@gmail.com";
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: AppBar(
+        title: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back)),
+        automaticallyImplyLeading: false,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 15),
+            child: Icon(Icons.done),
+          )
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        child: ListView(
+          children: [
+            Container(
+              height: 300,
+              width: 300,
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 40),
+                child: Column(
+                  children: [
+                    CircleAvatar(radius: 40.0, backgroundColor: Colors.blue),
+                    SizedBox(height: 5),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5),
+                      child: Container(
+                        width: 150,
+                        child: TextFormField(
+                          textAlign: TextAlign.center,
+                          controller: _titleController,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 2),
+                    TextFormField(
+                      textAlign: TextAlign.center,
+                      controller: _subtitleController,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          children: [
+                            Text(
+                              "Role",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                    color: Colors.grey,
+                                  ),
+                            ),
+                            Container(
+                              width: 100,
+                              child: TextFormField(
+                                textAlign: TextAlign.center,
+                                controller: _roleController,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: 10),
+                        Column(
+                          children: [
+                            Text("Team",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                      color: Colors.grey,
+                                    )),
+                            Container(
+                              width: 100,
+                              child: TextFormField(
+                                textAlign: TextAlign.center,
+                                controller: _teamController,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                // color: Colors.green,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Spacilation",
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: Colors.grey,
+                            )),
+                    Container(
+                      child: TextFormField(
+                        controller: _spacilationController,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text("Contact",
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: Colors.grey,
+                            )),
+                    Container(
+                      child: TextFormField(
+                        controller: _contactController,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                    Text("Email",
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: Colors.grey,
+                            )),
+                    Container(
+                      child: TextFormField(
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

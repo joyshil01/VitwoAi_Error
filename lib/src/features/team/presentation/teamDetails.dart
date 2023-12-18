@@ -188,52 +188,41 @@ class _TeamDetailsState extends State<TeamDetails> {
               ],
             ),
             Text(
-              'Address',
+              'Spacilation',
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     color: Colors.grey,
                   ),
             ),
             const SizedBox(height: 4),
             Text(
-              'Kazipara, barasat',
+              'Flutter Devloper',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 10),
             Text(
-              'City',
+              'Contact',
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     color: Colors.grey,
                   ),
             ),
             const SizedBox(height: 4),
             Text(
-              'Barasat',
+              '6296224432',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 10),
             Text(
-              'Dist',
+              'Email',
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     color: Colors.grey,
                   ),
             ),
             const SizedBox(height: 4),
             Text(
-              'North 24 parganas',
+              'mamoon@gmail.com',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 10),
-            Text(
-              'Pin',
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: Colors.grey,
-                  ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              '700156',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
           ],
         ),
       ),
