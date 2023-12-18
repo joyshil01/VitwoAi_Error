@@ -1,3 +1,4 @@
+import 'package:error/constans.dart';
 import 'package:flutter/material.dart';
 
 class EditTeamDetails extends StatefulWidget {
@@ -37,11 +38,23 @@ class _EditTeamDetailsState extends State<EditTeamDetails> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(Icons.arrow_back)),
+        backgroundColor: mainColor,
+        title: Row(
+          children: [
+            IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(Icons.arrow_back)),
+            Text(
+              "Edite Profile",
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(fontSize: 18, color: Colors.white),
+            )
+          ],
+        ),
         automaticallyImplyLeading: false,
         actions: [
           Padding(
