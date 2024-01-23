@@ -90,6 +90,42 @@ class _TeamScreenState extends State<TeamScreen> {
                           ),
                         ],
                       ),
+                      SizedBox(width: 60),
+                      Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 5),
+                            child: Text("Assign"),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100),
+                                border: Border.all()),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text("1"),
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(width: 20),
+                      Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 5),
+                            child: Text("TO-DO"),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100),
+                                border: Border.all()),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text("2"),
+                            ),
+                          )
+                        ],
+                      )
                     ],
                   ),
                 ),

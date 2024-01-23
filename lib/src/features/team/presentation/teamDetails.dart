@@ -1,9 +1,16 @@
 import 'package:error/constans.dart';
+import 'package:error/src/features/team/presentation/editTeamDetails.dart';
 import 'package:flutter/material.dart';
 
-class TeamDetails extends StatelessWidget {
+class TeamDetails extends StatefulWidget {
   const TeamDetails({super.key});
 
+  @override
+  State<TeamDetails> createState() => _TeamDetailsState();
+}
+
+class _TeamDetailsState extends State<TeamDetails> {
+  bool swichValue = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,7 +121,12 @@ class TeamDetails extends StatelessWidget {
                       padding: const EdgeInsets.all(12.0),
                       child: TextButton(
                         onPressed: () {
-                          print('im pressed');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditTeamDetails(),
+                            ),
+                          );
                         },
                         child: Container(
                           padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
@@ -146,53 +158,71 @@ class TeamDetails extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
+            Row(
+              children: [
+                Text("InActive",
+                    style: swichValue == false
+                        ? Theme.of(context).textTheme.bodyMedium
+                        : Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(color: Colors.grey)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(),
+                  child: Switch(
+                      activeColor: Colors.green,
+                      value: swichValue,
+                      onChanged: (value) {
+                        setState(() {
+                          swichValue = value;
+                        });
+                      }),
+                ),
+                Text("Active",
+                    style: swichValue == true
+                        ? Theme.of(context).textTheme.bodyMedium
+                        : Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(color: Colors.grey)),
+              ],
+            ),
             Text(
-              'Address',
+              'Spacilation',
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     color: Colors.grey,
                   ),
             ),
             const SizedBox(height: 4),
             Text(
-              'Kazipara, barasat',
+              'Flutter Devloper',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 10),
             Text(
-              'City',
+              'Contact',
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     color: Colors.grey,
                   ),
             ),
             const SizedBox(height: 4),
             Text(
-              'Barasat',
+              '6296224432',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 10),
             Text(
-              'Dist',
+              'Email',
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     color: Colors.grey,
                   ),
             ),
             const SizedBox(height: 4),
             Text(
-              'North 24 parganas',
+              'mamoon@gmail.com',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 10),
-            Text(
-              'Pin',
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: Colors.grey,
-                  ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              '700156',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
           ],
         ),
       ),
